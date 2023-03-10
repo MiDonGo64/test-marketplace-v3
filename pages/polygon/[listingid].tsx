@@ -5,11 +5,14 @@ import {
     useContract,
     useContractEvents,
     useDirectListing,
+    useOffers,
     useValidDirectListings,
     useValidEnglishAuctions,
     Web3Button,
   } from "@thirdweb-dev/react";
-import React, { useState } from "react";
+import { CHAIN_ID_TO_NAME, ContractEvents, NFT, ThirdwebSDK, } from "@thirdweb-dev/sdk";
+import { Goerli, Mumbai, Ethereum, Polygon } from "@thirdweb-dev/chains";
+import React, { useState, useEffect } from "react";
 import {
     MARKETPLACE_ADDRESS
   } from "../../const/contractAddresses";
@@ -20,20 +23,16 @@ import toastStyle from "../../util/toastConfig";
 import styles from "../../styles/Token.module.css";
 import Container from "../../components/Container/Container";
 import Link from "next/link";
-
-type Props = {
-    contractMetadata: any;
-    
-  };
+import { BigNumber, ethers } from "ethers";
 
 const [randomColor1, randomColor2] = [randomColor(), randomColor()];
   
-export default function TokenPage({ contractMetadata }: Props) {
+export default async function TokenPage() {
+  var thirdwebCheckout = require('./thirdweb-checkout-22725c9d.cjs.dev.js');
   const [bidValue, setBidValue] = useState<string>();
+  const [ listingIdFormatted, setListingIdFormatted ] = useState<BigNumber>();
   const router = useRouter();
   const listingId = router.query;
-  
-  const listingIdFormatted = listingId?.toString();
 
   // Connect to marketplace smart contract
   const { contract: marketplace } = useContract(
@@ -44,6 +43,10 @@ export default function TokenPage({ contractMetadata }: Props) {
   const { data: nft, isLoading } = useDirectListing(marketplace, listingIdFormatted);
 
   const collectionAddress = nft?.assetContractAddress;
+
+  const sdk = new ThirdwebSDK(CHAIN_ID_TO_NAME[Mumbai.chainId]);
+
+  const contract = await sdk.getContract(nft?.assetContractAddress as string);
 
   // Connect to NFT Collection smart contract
   const { contract: nftCollection } = useContract(collectionAddress);
@@ -58,6 +61,24 @@ export default function TokenPage({ contractMetadata }: Props) {
           order: "desc",
         },
       });
+
+    // Load offers events
+    const listingEvents =
+      await marketplace?.events.getEvents("NewOffer", {
+        order: "desc",
+        filters: {
+          listingIdFormatted
+        }
+      });
+      // derive the offers from the events
+      return await Promise.all(listingEvents.map(async e => {
+        return await thirdwebCheckout.mapOffer(listingIdFormatted, {
+          quantityWanted: e.data.quantityWanted,
+          pricePerToken: e.data.quantityWanted.gt(0) ? e.data.totalOfferAmount.div(e.data.quantityWanted) : e.data.totalOfferAmount,
+          currency: e.data.currency,
+          offeror: e.data.offeror
+        });
+      }));
   
     async function createBidOrOffer() {
       let txResult;
@@ -71,11 +92,13 @@ export default function TokenPage({ contractMetadata }: Props) {
       }
   
       try {
-        txResult = await marketplace?.offers.makeOffer({
-          assetContractAddress: nft?.assetContractAddress as string,
-          tokenId: nft?.tokenId as string,
-          totalPrice: bidValue,
-        });
+      txResult = await marketplace?.offers.makeOffer({
+        quantity: 1,
+        currencyContractAddress: "0xEeFf81Ff1eCE66F44CD6D1681789AB447F2004Fb",
+        tokenId: nft?.tokenId as string,
+        totalPrice: bidValue,
+        assetContractAddress: nft?.assetContractAddress as string,
+      });
       } catch {
         throw new Error("No valid listing found for this NFT");
       }
@@ -96,8 +119,17 @@ export default function TokenPage({ contractMetadata }: Props) {
       }
       return txResult;
     }
+    
+    useEffect(() => {
+      if (router.isReady) {
+        setListingIdFormatted(BigNumber.from(listingId.listingid));
+        console.log(listingId.listingid);
+      }
+    }, [router.isReady]);
+
+
   
-    console.log(listingId)
+    
     return (
         <>
           <Toaster position="bottom-center" reverseOrder={false} />
@@ -110,15 +142,7 @@ export default function TokenPage({ contractMetadata }: Props) {
                 />
     
                 <div className={styles.descriptionContainer}>
-                {contractMetadata && (
-                  <div className={styles.contractMetadataContainer}>
-                    <MediaRenderer
-                      src={contractMetadata.image}
-                      className={styles.collectionImage}
-                    />
-                    <p className={styles.collectionName}>{contractMetadata.name}</p>
-                  </div>
-                )}
+                
                 <h1 className={styles.title}>{nft?.asset?.name}</h1>
                 <p className={styles.collectionName}>Token ID #{nft?.tokenId}</p>
     
@@ -250,7 +274,6 @@ export default function TokenPage({ contractMetadata }: Props) {
                 </div>
     
                 <h3 className={styles.descriptionTitle}>Offers</h3>
-    
                 
     
                 <h3 className={styles.descriptionTitle}>History</h3>
@@ -307,3 +330,8 @@ export default function TokenPage({ contractMetadata }: Props) {
         </>
       );
     }
+
+function mapOffer(listingIdFormatted: BigNumber | undefined, arg1: { quantityWanted: any; pricePerToken: any; currency: any; offeror: any; }) {
+  throw new Error("Function not implemented.");
+}
+
