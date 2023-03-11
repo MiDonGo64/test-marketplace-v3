@@ -56,7 +56,7 @@ export default async function TokenPage() {
       });
 
     // load all valid offers on token
-    const listingEvents = marketplace?.offers.getAllValid(listingId)
+    const listingEvents = marketplace?.offers.getAllValid()
   
     async function createBidOrOffer() {
       let txResult;
@@ -254,6 +254,7 @@ export default async function TokenPage() {
                 <div className={styles.traitsContainer}>
                   {(await listingEvents)?.map((list) => (
                     <div
+                      key={????}
                       className={styles.eventsContainer}
                     >
                       <div className={styles.eventContainer}>
