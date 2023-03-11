@@ -5,13 +5,10 @@ import {
     useContract,
     useContractEvents,
     useDirectListing,
-    useOffers,
     useValidDirectListings,
     useValidEnglishAuctions,
     Web3Button,
   } from "@thirdweb-dev/react";
-import { CHAIN_ID_TO_NAME, ContractEvents, NFT, ThirdwebSDK, } from "@thirdweb-dev/sdk";
-import { Goerli, Mumbai, Ethereum, Polygon } from "@thirdweb-dev/chains";
 import React, { useState, useEffect } from "react";
 import {
     MARKETPLACE_ADDRESS
@@ -23,12 +20,12 @@ import toastStyle from "../../util/toastConfig";
 import styles from "../../styles/Token.module.css";
 import Container from "../../components/Container/Container";
 import Link from "next/link";
-import { BigNumber, ethers } from "ethers";
+import { BigNumber } from "ethers";
+
 
 const [randomColor1, randomColor2] = [randomColor(), randomColor()];
   
 export default async function TokenPage() {
-  var thirdwebCheckout = require('./thirdweb-checkout-22725c9d.cjs.dev.js');
   const [bidValue, setBidValue] = useState<string>();
   const [ listingIdFormatted, setListingIdFormatted ] = useState<BigNumber>();
   const router = useRouter();
@@ -44,10 +41,6 @@ export default async function TokenPage() {
 
   const collectionAddress = nft?.assetContractAddress;
 
-  const sdk = new ThirdwebSDK(CHAIN_ID_TO_NAME[Mumbai.chainId]);
-
-  const contract = await sdk.getContract(nft?.assetContractAddress as string);
-
   // Connect to NFT Collection smart contract
   const { contract: nftCollection } = useContract(collectionAddress);
   
@@ -62,23 +55,8 @@ export default async function TokenPage() {
         },
       });
 
-    // Load offers events
-    const listingEvents =
-      await marketplace?.events.getEvents("NewOffer", {
-        order: "desc",
-        filters: {
-          listingIdFormatted
-        }
-      });
-      // derive the offers from the events
-      return await Promise.all(listingEvents.map(async e => {
-        return await thirdwebCheckout.mapOffer(listingIdFormatted, {
-          quantityWanted: e.data.quantityWanted,
-          pricePerToken: e.data.quantityWanted.gt(0) ? e.data.totalOfferAmount.div(e.data.quantityWanted) : e.data.totalOfferAmount,
-          currency: e.data.currency,
-          offeror: e.data.offeror
-        });
-      }));
+    // load all valid offers on token
+    const listingEvents = marketplace?.offers.getAllValid(listingId)
   
     async function createBidOrOffer() {
       let txResult;
@@ -92,13 +70,13 @@ export default async function TokenPage() {
       }
   
       try {
-      txResult = await marketplace?.offers.makeOffer({
+        txResult = await marketplace?.offers.makeOffer({
         quantity: 1,
         currencyContractAddress: "0xEeFf81Ff1eCE66F44CD6D1681789AB447F2004Fb",
         tokenId: nft?.tokenId as string,
         totalPrice: bidValue,
         assetContractAddress: nft?.assetContractAddress as string,
-      });
+        });
       } catch {
         throw new Error("No valid listing found for this NFT");
       }
@@ -119,7 +97,7 @@ export default async function TokenPage() {
       }
       return txResult;
     }
-    
+  
     useEffect(() => {
       if (router.isReady) {
         setListingIdFormatted(BigNumber.from(listingId.listingid));
@@ -127,9 +105,7 @@ export default async function TokenPage() {
       }
     }, [router.isReady]);
 
-
-  
-    
+    console.log(listingEvents)
     return (
         <>
           <Toaster position="bottom-center" reverseOrder={false} />
@@ -142,7 +118,7 @@ export default async function TokenPage() {
                 />
     
                 <div className={styles.descriptionContainer}>
-                
+                <p className={styles.label}>add link to collection page</p>
                 <h1 className={styles.title}>{nft?.asset?.name}</h1>
                 <p className={styles.collectionName}>Token ID #{nft?.tokenId}</p>
     
@@ -274,7 +250,36 @@ export default async function TokenPage() {
                 </div>
     
                 <h3 className={styles.descriptionTitle}>Offers</h3>
-                
+
+                <div className={styles.traitsContainer}>
+                  {(await listingEvents)?.map((list) => (
+                    <div
+                      className={styles.eventsContainer}
+                    >
+                      <div className={styles.eventContainer}>
+                        <p className={styles.traitName}>ID</p>
+                        <p className={styles.traitValue}>
+                          {list.id}
+                        </p>
+                      </div>
+    
+                      <div className={styles.eventContainer}>
+                        <p className={styles.traitName}>USDC</p>
+                        <p className={styles.traitValue}>
+                          {list.currencyValue.displayValue.slice(0, 4)}
+                        </p>
+                      </div>
+    
+                      <div className={styles.eventContainer}>
+                        <p className={styles.traitName}>From</p>
+                        <p className={styles.traitValue}>
+                          {list.offerorAddress.slice(0, 4)}...
+                          {list.offerorAddress.slice(-2)}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
     
                 <h3 className={styles.descriptionTitle}>History</h3>
     
@@ -330,8 +335,3 @@ export default async function TokenPage() {
         </>
       );
     }
-
-function mapOffer(listingIdFormatted: BigNumber | undefined, arg1: { quantityWanted: any; pricePerToken: any; currency: any; offeror: any; }) {
-  throw new Error("Function not implemented.");
-}
-
