@@ -266,7 +266,7 @@ export default async function TokenPage() {
                       <div className={styles.eventContainer}>
                         <p className={styles.traitName}>USDC</p>
                         <p className={styles.traitValue}>
-                          {list.currencyValue.displayValue.slice(0, 4)}
+                          {list.currencyValue.displayValue}
                         </p>
                       </div>
     
