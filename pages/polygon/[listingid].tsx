@@ -9,7 +9,7 @@ import {
     useValidEnglishAuctions,
     Web3Button,
   } from "@thirdweb-dev/react";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Children } from "react";
 import {
     MARKETPLACE_ADDRESS
   } from "../../const/contractAddresses";
@@ -55,8 +55,8 @@ export default async function TokenPage() {
         },
       });
 
-    // load all valid offers on token
-    const listingEvents = marketplace?.offers.getAllValid()
+    // load list of valid offers made on token
+    const listingEvents = marketplace?.offers.getAllValid(listingId)
   
     async function createBidOrOffer() {
       let txResult;
@@ -105,7 +105,7 @@ export default async function TokenPage() {
       }
     }, [router.isReady]);
 
-    console.log(listingEvents)
+      console.log(listingEvents)
     return (
         <>
           <Toaster position="bottom-center" reverseOrder={false} />
@@ -250,11 +250,11 @@ export default async function TokenPage() {
                 </div>
     
                 <h3 className={styles.descriptionTitle}>Offers</h3>
-
+    
                 <div className={styles.traitsContainer}>
-                  {(await listingEvents)?.map((list) => (
+                  {(await listingEvents)?.map(list => (
                     <div
-                      key={????}
+                      key={list.id}
                       className={styles.eventsContainer}
                     >
                       <div className={styles.eventContainer}>
@@ -272,10 +272,9 @@ export default async function TokenPage() {
                       </div>
     
                       <div className={styles.eventContainer}>
-                        <p className={styles.traitName}>From</p>
+                        <p className={styles.traitName}>By</p>
                         <p className={styles.traitValue}>
-                          {list.offerorAddress.slice(0, 4)}...
-                          {list.offerorAddress.slice(-2)}
+                          {}
                         </p>
                       </div>
                     </div>
