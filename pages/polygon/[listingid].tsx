@@ -1,4 +1,5 @@
 import { useRouter } from "next/router";
+import type { NextPage } from 'next';
 import {
     MediaRenderer,
     ThirdwebNftMedia,
@@ -26,7 +27,7 @@ import { OfferV3 } from "@thirdweb-dev/sdk";
 
 const [randomColor1, randomColor2] = [randomColor(), randomColor()];
   
-export default function TokenPage() {
+const TokenPage: NextPage = () => {
   const [bidValue, setBidValue] = useState<string>();
   const [ listingIdFormatted, setListingIdFormatted ] = useState<BigNumber>();
   const router = useRouter();
@@ -57,7 +58,7 @@ export default function TokenPage() {
       });
 
     // load list of valid offers made on token
-    const listingEvents = async () => {
+    async function listingEvents() {
       const events = await marketplace?.offers.getAllValid(listingId);
       return events || [];
     };
@@ -339,4 +340,6 @@ export default function TokenPage() {
         </>
       );
     }
+
+export default TokenPage;
 
