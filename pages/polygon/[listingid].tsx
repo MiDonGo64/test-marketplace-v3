@@ -21,6 +21,7 @@ import styles from "../../styles/Token.module.css";
 import Container from "../../components/Container/Container";
 import Link from "next/link";
 import { BigNumber } from "ethers";
+import { OfferV3 } from "@thirdweb-dev/sdk";
 
 
 const [randomColor1, randomColor2] = [randomColor(), randomColor()];
@@ -56,8 +57,10 @@ export default function TokenPage() {
       });
 
     // load list of valid offers made on token
-    const listingEvents = () => {
-      marketplace?.offers.getAllValid(listingId)}
+    const listingEvents = async () => {
+      const events = await marketplace?.offers.getAllValid(listingId);
+      return events || [];
+    };
   
     async function createBidOrOffer() {
       let txResult;
@@ -253,7 +256,7 @@ export default function TokenPage() {
                 <h3 className={styles.descriptionTitle}>Offers</h3>
     
                 <div className={styles.traitsContainer}>
-                  {listingEvents().map((list) => (
+                  {(await listingEvents()).map((list) => (
                     <div
                       key={list.id}
                       className={styles.eventsContainer}
