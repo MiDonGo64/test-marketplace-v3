@@ -9,7 +9,7 @@ import {
     useValidEnglishAuctions,
     Web3Button,
   } from "@thirdweb-dev/react";
-import React, { useState, useEffect, Children } from "react";
+import React, { useState, useEffect } from "react";
 import {
     MARKETPLACE_ADDRESS
   } from "../../const/contractAddresses";
@@ -25,7 +25,7 @@ import { BigNumber } from "ethers";
 
 const [randomColor1, randomColor2] = [randomColor(), randomColor()];
   
-export default async function TokenPage() {
+export default function TokenPage() {
   const [bidValue, setBidValue] = useState<string>();
   const [ listingIdFormatted, setListingIdFormatted ] = useState<BigNumber>();
   const router = useRouter();
@@ -56,7 +56,8 @@ export default async function TokenPage() {
       });
 
     // load list of valid offers made on token
-    const listingEvents = marketplace?.offers.getAllValid(listingId)
+    const listingEvents = () => {
+      marketplace?.offers.getAllValid(listingId)}
   
     async function createBidOrOffer() {
       let txResult;
@@ -252,7 +253,7 @@ export default async function TokenPage() {
                 <h3 className={styles.descriptionTitle}>Offers</h3>
     
                 <div className={styles.traitsContainer}>
-                  {(await listingEvents)?.map(list => (
+                  {listingEvents().map((list) => (
                     <div
                       key={list.id}
                       className={styles.eventsContainer}
@@ -335,3 +336,4 @@ export default async function TokenPage() {
         </>
       );
     }
+
