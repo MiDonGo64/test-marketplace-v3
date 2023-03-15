@@ -1,5 +1,4 @@
 import { useRouter } from "next/router";
-import type { NextPage } from 'next';
 import {
     MediaRenderer,
     ThirdwebNftMedia,
@@ -10,7 +9,7 @@ import {
     useValidEnglishAuctions,
     Web3Button,
   } from "@thirdweb-dev/react";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
     MARKETPLACE_ADDRESS
   } from "../../const/contractAddresses";
@@ -27,9 +26,10 @@ import { OfferV3 } from "@thirdweb-dev/sdk";
 
 const [randomColor1, randomColor2] = [randomColor(), randomColor()];
   
-const TokenPage: NextPage = () => {
+export default async function TokenPage() {
   const [bidValue, setBidValue] = useState<string>();
   const [ listingIdFormatted, setListingIdFormatted ] = useState<BigNumber>();
+  const [offers, setOffers] = useState<OfferV3[]>()
   const router = useRouter();
   const listingId = router.query;
 
@@ -57,11 +57,20 @@ const TokenPage: NextPage = () => {
         },
       });
 
-    // load list of valid offers made on token
-    async function listingEvents() {
-      const events = await marketplace?.offers.getAllValid(listingId);
-      return events || [];
+    const listingEvents = async () => {
+      const offers = await marketplace?.offers.getAllValid(listingId);
+      return offers || [];
     };
+
+    // load list of valid offers made on token
+    useEffect( () => {
+      async function listingEvents() {
+        const offers = await marketplace?.offers.getAllValid(listingId);
+        setOffers(offers);
+        console.log(offers);
+      }
+      listingEvents();
+    }, []);
   
     async function createBidOrOffer() {
       let txResult;
@@ -110,7 +119,7 @@ const TokenPage: NextPage = () => {
       }
     }, [router.isReady]);
 
-      console.log(listingEvents)
+
     return (
         <>
           <Toaster position="bottom-center" reverseOrder={false} />
@@ -257,7 +266,7 @@ const TokenPage: NextPage = () => {
                 <h3 className={styles.descriptionTitle}>Offers</h3>
     
                 <div className={styles.traitsContainer}>
-                  {(await listingEvents()).map((list) => (
+                  {offers?.map((list, index) => (
                     <div
                       key={list.id}
                       className={styles.eventsContainer}
@@ -279,7 +288,8 @@ const TokenPage: NextPage = () => {
                       <div className={styles.eventContainer}>
                         <p className={styles.traitName}>By</p>
                         <p className={styles.traitValue}>
-                          {}
+                        {list.offerorAddress?.slice(0, 4)}...
+                          {list.offerorAddress?.slice(-2)}
                         </p>
                       </div>
                     </div>
@@ -340,6 +350,4 @@ const TokenPage: NextPage = () => {
         </>
       );
     }
-
-export default TokenPage;
 
