@@ -57,11 +57,6 @@ export default async function TokenPage() {
         },
       });
 
-    const listingEvents = async () => {
-      const offers = await marketplace?.offers.getAllValid(listingId);
-      return offers || [];
-    };
-
     // load list of valid offers made on token
     useEffect( () => {
       async function listingEvents() {
