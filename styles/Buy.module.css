@@ -1,3 +1,5 @@
+
+
 .nftGridContainer {
   display: flex;
   flex-direction: row;
@@ -9,6 +11,7 @@
 .nftContainer {
   width: 17.8%;
   margin: 8px;
+  background-color: #3a434a8f;
   position: relative;
   overflow: hidden;
   border-radius: 8px;
@@ -32,6 +35,20 @@
   padding: 8px;
   font-size: 3rem;
   margin-bottom: 8px;
+}
+
+.link {
+  color: #1ec046;
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+  line-height: 16px;
+  transition: color 0.3s ease-in-out;
+  background-color: #3a434a70;
+}
+
+.link:hover {
+  color: #14e047;
 }
 
 /* Responsive */

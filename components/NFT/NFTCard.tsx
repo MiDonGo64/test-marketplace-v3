@@ -1,6 +1,7 @@
 import { MediaRenderer } from "@thirdweb-dev/react";
-  import React from "react";
-  import styles from "./NFT.module.css";
+import React from "react";
+import styles from "./OPENNFT.module.css";
+
   
   
 
@@ -16,12 +17,14 @@ export default function NFTCard({
 }) {
     return (
         <>
+        <div className={styles.nftContainer}>
           <MediaRenderer src={nft.tokenUri} className={styles.nftImage} />
     
           <p className={styles.nftTokenId}>Token ID #{nft?.tokenId}</p>
           <p className={styles.nftName}>{nft.name}</p>
     
           <div className={styles.priceContainer}>
+          
             {nft.price && (
               <div className={styles.nftPriceContainer}>
                 <div>
@@ -32,6 +35,7 @@ export default function NFTCard({
                 </div>
               </div>
             )}
+          </div>
           </div>
         </>
       );

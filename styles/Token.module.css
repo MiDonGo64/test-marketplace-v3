@@ -1,3 +1,5 @@
+
+
 .container {
   max-width: 100%;
   display: flex;
@@ -174,6 +176,7 @@
   min-width: 128px;
   border-radius: 16px;
   min-height: 32px;
+  background: #3a434a70;
 }
 
 .eventsContainer {
@@ -188,6 +191,7 @@
   min-width: 128px;
   border-radius: 16px;
   min-height: 32px;
+  background: #3a434a70;
 }
 
 .traitValue {
@@ -221,7 +225,7 @@
   position: relative;
   -webkit-box-flex: 1;
   flex-grow: 1;
-  background: transparent;
+  background: #3a434a70;
   border-radius: 16px;
   overflow: hidden;
   margin-top: 32px;
@@ -289,4 +293,18 @@
   .metadataContainer {
     margin-top: 32px;
   }
+}
+
+.link {
+  color: #1ec046;
+  font-size: 16px;
+  font-weight: 500;
+  letter-spacing: 0.2px;
+  line-height: 16px;
+  transition: color 0.3s ease-in-out;
+  background-color: #3a434a70;
+}
+
+.link:hover {
+  color: #14e047;
 }

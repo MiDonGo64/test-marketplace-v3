@@ -1,6 +1,18 @@
 {
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "context/WalletBalanceProvider.jsx",
+    "context/UserContextProvider.jsx",
+    "pages/_document.tsx",
+    "components/layout/Footer.tsx",
+    "components/layout/Layout.tsx",
+    "components/layout/Header.tsx"
+  ],
+  "exclude": ["node_modules"],
   "compilerOptions": {
-    "target": "es5",
+    "target": "es2022",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
@@ -13,8 +25,8 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "preserve",
-    "incremental": true
-  },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx" ],
-  "exclude": ["node_modules"]
+    "incremental": true,
+    "removeComments": true,
+    "baseUrl": "."
+  }
 }
