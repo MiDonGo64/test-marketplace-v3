@@ -4,8 +4,8 @@
   "author": "Don",
   "license": "Apache-2.0",
   "engines": {
-    "node": ">=16.15.0",
-    "yarn": ">=1.22.19",
+    "node": "16.15.0",
+    "yarn": "1.22.19",
     "npm": "please-use-yarn"
   },
   "files": [
@@ -65,3 +65,4 @@
     "typescript": "5.0.4"
   }
 }
+
