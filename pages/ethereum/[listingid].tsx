@@ -109,6 +109,7 @@ export default async function TokenPage() {
               }
             );
             setOffers(offers);
+            console.log(offers);
           }
           listingEvents();
         }, [offers]);
@@ -130,7 +131,7 @@ export default async function TokenPage() {
                  href={`/index`}
                  className={styles.label}
                   >
-                <p>Check if this NFT is on the big list.</p>
+                Check if this NFT is on the big list.
                 </Link>
                 <h1 className={styles.title}>{nft?.asset?.name}</h1>
                 <p className={styles.collectionName}>Token ID #{nft?.tokenId}</p>
