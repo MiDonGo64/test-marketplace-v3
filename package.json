@@ -3,11 +3,7 @@
   "version": "0.1.0",
   "author": "Don",
   "license": "Apache-2.0",
-  "engines": {
-    "node": "18.16.0",
-    "yarn": "1.22.17",
-    "npm": "please-use-yarn"
-  },
+  
   "files": [
     "components",
     "pages",
