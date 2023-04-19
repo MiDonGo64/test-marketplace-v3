@@ -38,11 +38,12 @@ import type {
                    >
                 <NFTCard
                   nft={{
-                   tokenId: nft.asset.id as string,
-                   name: nft.asset.name as string,
-                   tokenUri: nft.asset.image as string,
-                   bid: nft.minimumBidCurrencyValue?.displayValue + nft.minimumBidCurrencyValue?.symbol
-                  }}
+                    tokenId: nft.asset.id as string,
+                    name: nft.asset.name as string,
+                    tokenUri: nft.asset.image as string,
+                    time: nft.endTimeInSeconds as number,
+                    bid: nft.minimumBidCurrencyValue?.displayValue + nft.minimumBidCurrencyValue?.symbol
+                   }}
                   />
               </Link>
             ) : (
@@ -53,11 +54,12 @@ import type {
               >
                 <NFTCard
                   nft={{
-                   tokenId: nft.asset.id as string,
-                   name: nft.asset.name as string,
-                   tokenUri: nft.asset.image as string,
-                   bid: nft.minimumBidCurrencyValue?.displayValue + nft.minimumBidCurrencyValue?.symbol
-                  }}
+                    tokenId: nft.asset.id as string,
+                    name: nft.asset.name as string,
+                    tokenUri: nft.asset.image as string,
+                    time: nft.endTimeInSeconds as number,
+                    bid: nft.minimumBidCurrencyValue?.displayValue + nft.minimumBidCurrencyValue?.symbol
+                   }}
                   />
               </div>
             )
