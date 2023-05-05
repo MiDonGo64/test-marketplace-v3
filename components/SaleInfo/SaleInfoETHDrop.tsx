@@ -65,6 +65,9 @@ export default function SaleInfo({ nft }: Props) {
   // Manage form submission state using tabs and conditional rendering
   const [tab, setTab] = useState<"direct" | "auction" | "Floor-crapper 420">("direct");
 
+  // Manage form batch listing amount using tabs and conditional rendering
+  const [dumpTab, setDumpTab] = useState<"1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10" | "11" | "12" | "13" | "14" | "15" | "16" | "17" | "18" | "19" | "20">("1");
+
   // Manage form values using react-hook-form library: Auction form
   const { register: registerAuction, handleSubmit: handleSubmitAuction } =
     useForm<AuctionFormData>({
@@ -147,6 +150,45 @@ export default function SaleInfo({ nft }: Props) {
       endTimestamp: new Date(data.endDate),
     });
 
+    return txResult;
+  }
+
+    // Manage form values using react-hook-form library: Direct form
+    const { register: registerBatch2, handleSubmit: handleSubmitBatch2 } =
+    useForm<DirectFormData>({
+      defaultValues: {
+        nftContractAddress: ETHDrop,
+        tokenId: nft.metadata.id,
+        startDate: new Date(),
+        endDate: new Date(),
+        currencyContractAddress: "0x72F60F2F9695C5911bA57ee43339AD82ce8ABB6A",
+        price: "0",
+      },
+    });
+
+  function createListingArray(data: DirectFormData, count: number) {
+    const listings = [];
+  
+    for (let i = 0; i < count; i++) {
+      const listing = {
+        assetContractAddress: data.nftContractAddress,
+        tokenId: data.tokenId,
+        currencyContractAddress: data.currencyContractAddress,
+        pricePerToken: data.price,
+        startTimestamp: new Date(data.startDate),
+        endTimestamp: new Date(data.endDate),
+      };
+      listings.push(listing);
+    }
+  
+    return listings;
+  }
+
+  async function handleSubmissionBatch(data: DirectFormData, count: number) {
+    const listings = createListingArray(data, count);
+    await checkAndProvideApproval();
+    const txResult = await marketplace?.directListings.createListingsBatch(listings);
+  
     return txResult;
   }
 
@@ -331,6 +373,153 @@ export default function SaleInfo({ nft }: Props) {
           }`}
           style={{ flexDirection: "column" }}
         >
+          <h5 className={styles.formSectionTitle2}>How many to sell?</h5>
+          <div className={profileStyles.tabs2}>
+          <h3
+            className={`${profileStyles.tab2} 
+        ${dumpTab === "2" ? profileStyles.activeTab : ""}`}
+            onClick={() => setDumpTab("2")}
+          >
+            2
+          </h3>
+          <h3
+            className={`${profileStyles.tab2} 
+        ${dumpTab === "3" ? profileStyles.activeTab : ""}`}
+            onClick={() => setDumpTab("3")}
+          >
+            3
+          </h3>
+          <h3
+            className={`${profileStyles.tab2} 
+        ${dumpTab === "4" ? profileStyles.activeTab : ""}`}
+            onClick={() => setDumpTab("4")}
+          >
+            4
+          </h3>
+          <h3
+            className={`${profileStyles.tab2} 
+        ${dumpTab === "5" ? profileStyles.activeTab : ""}`}
+            onClick={() => setDumpTab("5")}
+          >
+            5
+          </h3>
+          <h3
+            className={`${profileStyles.tab2} 
+        ${dumpTab === "6" ? profileStyles.activeTab : ""}`}
+            onClick={() => setDumpTab("6")}
+          >
+            6
+          </h3>
+          <h3
+            className={`${profileStyles.tab2} 
+        ${dumpTab === "7" ? profileStyles.activeTab : ""}`}
+            onClick={() => setDumpTab("7")}
+          >
+            7
+          </h3>
+          <h3
+            className={`${profileStyles.tab2} 
+        ${dumpTab === "8" ? profileStyles.activeTab : ""}`}
+            onClick={() => setDumpTab("8")}
+          >
+            8
+          </h3>
+          <h3
+            className={`${profileStyles.tab2} 
+        ${dumpTab === "9" ? profileStyles.activeTab : ""}`}
+            onClick={() => setDumpTab("9")}
+          >
+            9
+          </h3>
+          <h3
+            className={`${profileStyles.tab2} 
+        ${dumpTab === "10" ? profileStyles.activeTab : ""}`}
+            onClick={() => setDumpTab("10")}
+          >
+            10
+          </h3>
+          <h3
+            className={`${profileStyles.tab2} 
+        ${dumpTab === "11" ? profileStyles.activeTab : ""}`}
+            onClick={() => setDumpTab("11")}
+          >
+            11
+          </h3>
+          <h3
+            className={`${profileStyles.tab2} 
+        ${dumpTab === "12" ? profileStyles.activeTab : ""}`}
+            onClick={() => setDumpTab("12")}
+          >
+            12
+          </h3>
+          <h3
+            className={`${profileStyles.tab2} 
+        ${dumpTab === "13" ? profileStyles.activeTab : ""}`}
+            onClick={() => setDumpTab("13")}
+          >
+            13
+          </h3>
+          <h3
+            className={`${profileStyles.tab2} 
+        ${dumpTab === "14" ? profileStyles.activeTab : ""}`}
+            onClick={() => setDumpTab("14")}
+          >
+            14
+          </h3>
+          <h3
+            className={`${profileStyles.tab2} 
+        ${dumpTab === "15" ? profileStyles.activeTab : ""}`}
+            onClick={() => setDumpTab("15")}
+          >
+            15
+          </h3>
+          <h3
+            className={`${profileStyles.tab2} 
+        ${dumpTab === "16" ? profileStyles.activeTab : ""}`}
+            onClick={() => setDumpTab("16")}
+          >
+            16
+          </h3>
+          <h3
+            className={`${profileStyles.tab2} 
+        ${dumpTab === "17" ? profileStyles.activeTab : ""}`}
+            onClick={() => setDumpTab("17")}
+          >
+            17
+          </h3>
+          <h3
+            className={`${profileStyles.tab2} 
+        ${dumpTab === "18" ? profileStyles.activeTab : ""}`}
+            onClick={() => setDumpTab("18")}
+          >
+            18
+          </h3>
+          <h3
+            className={`${profileStyles.tab2} 
+        ${dumpTab === "19" ? profileStyles.activeTab : ""}`}
+            onClick={() => setDumpTab("19")}
+          >
+            19
+          </h3>
+          <h3
+            className={`${profileStyles.tab2} 
+        ${dumpTab === "20" ? profileStyles.activeTab : ""}`}
+            onClick={() => setDumpTab("20")}
+          >
+            20
+          </h3>
+        </div>
+        {/* Batch listing 2 */}
+        <div
+          className={`${
+            dumpTab === "2"
+              ? styles.activeTabContent
+              : profileStyles.tabContent
+          }`}
+          style={{ flexDirection: "column" }}
+        >
+
+          <h5 className={styles.formSectionTitle}>listing 1</h5>
           <h4 className={styles.formSectionTitle}>When </h4>
 
           {/* Input field for auction start date */}
@@ -338,7 +527,7 @@ export default function SaleInfo({ nft }: Props) {
           <input
             className={styles.input}
             type="datetime-local"
-            {...registerDirect("startDate")}
+            {...registerBatch2("startDate")}
             aria-label="Auction Start Date"
           />
 
@@ -347,7 +536,7 @@ export default function SaleInfo({ nft }: Props) {
           <input
             className={styles.input}
             type="datetime-local"
-            {...registerDirect("endDate")}
+            {...registerBatch2("endDate")}
             aria-label="Auction End Date"
           />
           <h4 className={styles.formSectionTitle}>Price </h4>
@@ -358,13 +547,44 @@ export default function SaleInfo({ nft }: Props) {
             className={styles.input}
             type="number"
             step={0.000001}
-            {...registerDirect("price")}
+            {...registerBatch2("price")}
+          />
+
+<h5 className={styles.formSectionTitle}>listing 2</h5>
+          <h4 className={styles.formSectionTitle}>When </h4>
+
+          {/* Input field for auction start date */}
+          <legend className={styles.legend}> Listing Starts on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch2("startDate")}
+            aria-label="Auction Start Date"
+          />
+
+          {/* Input field for auction end date */}
+          <legend className={styles.legend}> Listing Ends on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch2("endDate")}
+            aria-label="Auction End Date"
+          />
+          <h4 className={styles.formSectionTitle}>Price </h4>
+
+          {/* Input field for buyout price */}
+          <legend className={styles.legend}> Price per token</legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={0.000001}
+            {...registerBatch2("price")}
           />
 
           <Web3Button
             contractAddress={ETH_MARKETPLACE_ADDRESS}
             action={async () => {
-              await handleSubmitDirect(handleSubmissionDirect)();
+              await handleSubmitBatch2(handleSubmissionDirect)();
             }}
             onError={(error) => {
               toast(`Listed Failed! Reason: ${error.cause}`, {
@@ -384,8 +604,9 @@ export default function SaleInfo({ nft }: Props) {
               );
             }}
           >
-            list 1
+            list 2
           </Web3Button>
+          </div>
         </div>
       </div>
     </>
