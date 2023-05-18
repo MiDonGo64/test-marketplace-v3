@@ -8,7 +8,7 @@ import {
   import { useState } from "react";
   import tokenPageStyles from "../../styles/Token.module.css";
   import Container from "../../components/Container/Container";
-  import NFTGridETHDrop from "../../components/NFT/NFTGrid/NFTGridETHDrop";
+  import NFTGrid from "../../components/NFT/NFTGrid/NFTGridETHDrop";
   import SaleInfo from "../../components/SaleInfo/SaleInfoETHDrop";
   import { ETHDrop } from "../../const/contractAddresses";
   import Link from "next/link";
@@ -57,8 +57,8 @@ const Bags: NextPage = () => {
         <h1>Drop some bags</h1>
         {!selectedNft ? (
           <>
-            <p>Select which NFT you&rsquo;d like to paperhand (sell) or grift (auction).</p>
-            <NFTGridETHDrop
+            <p>Select which NFT you&rsquo;d like to paperhand (sell) or grift (auction). Got a few to sell? Try the</p><p className="text-green-500"> Floor-Crapper-420.</p>
+            <NFTGrid
               data={data}
               isLoading={isLoading}
               overrideOnclickBehavior={(nft) => {

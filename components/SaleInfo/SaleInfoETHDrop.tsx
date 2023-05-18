@@ -8,13 +8,14 @@ import { NFT as NFTType } from "@thirdweb-dev/sdk";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import toast, { Toaster } from "react-hot-toast";
 import profileStyles from "../../styles/Profile.module.css";
 import styles from "../../styles/Sale.module.css";
 import {
   ETHDrop,
-  ETH_MARKETPLACE_ADDRESS
+  POLY_MARKETPLACE_ADDRESS,
+  TUSDC_FOR_MUMBAI
 } from "../../const/contractAddresses";
 import toastStyle from "../../utils/toastConfig";
 
@@ -41,11 +42,488 @@ type DirectFormData = {
   endDate: Date;
 };
 
+type TwoBatchFormData = {
+  listings: [
+    {
+      nftContractAddress: string;
+      tokenId: string;
+      currencyContractAddress: string;
+      price: string;
+      startDate: Date;
+      endDate: Date;
+    },
+    {
+      nftContractAddress: string;
+      tokenId: string;
+      currencyContractAddress: string;
+      price: string;
+      startDate: Date;
+      endDate: Date;
+    }
+  ],
+};
+
+type ThreeBatchFormData = {
+  listings: [
+    {
+      nftContractAddress: string;
+      tokenId: string;
+      currencyContractAddress: string;
+      price: string;
+      startDate: Date;
+      endDate: Date;
+    },
+    {
+      nftContractAddress: string;
+      tokenId: string;
+      currencyContractAddress: string;
+      price: string;
+      startDate: Date;
+      endDate: Date;
+    },
+    {
+      nftContractAddress: string;
+      tokenId: string;
+      currencyContractAddress: string;
+      price: string;
+      startDate: Date;
+      endDate: Date;
+    }
+  ],
+};
+
+type FourBatchFormData = {
+  listings: [
+    {
+      nftContractAddress: string;
+      tokenId: string;
+      currencyContractAddress: string;
+      price: string;
+      startDate: Date;
+      endDate: Date;
+    },
+    {
+      nftContractAddress: string;
+      tokenId: string;
+      currencyContractAddress: string;
+      price: string;
+      startDate: Date;
+      endDate: Date;
+    },
+    {
+      nftContractAddress: string;
+      tokenId: string;
+      currencyContractAddress: string;
+      price: string;
+      startDate: Date;
+      endDate: Date;
+    },
+    {
+      nftContractAddress: string;
+      tokenId: string;
+      currencyContractAddress: string;
+      price: string;
+      startDate: Date;
+      endDate: Date;
+    }
+  ],
+};
+
+type FiveBatchFormData = {
+  listings: [
+    {
+      nftContractAddress: string;
+      tokenId: string;
+      currencyContractAddress: string;
+      price: string;
+      startDate: Date;
+      endDate: Date;
+    },
+    {
+      nftContractAddress: string;
+      tokenId: string;
+      currencyContractAddress: string;
+      price: string;
+      startDate: Date;
+      endDate: Date;
+    },
+    {
+      nftContractAddress: string;
+      tokenId: string;
+      currencyContractAddress: string;
+      price: string;
+      startDate: Date;
+      endDate: Date;
+    },
+    {
+      nftContractAddress: string;
+      tokenId: string;
+      currencyContractAddress: string;
+      price: string;
+      startDate: Date;
+      endDate: Date;
+    },
+    {
+      nftContractAddress: string;
+      tokenId: string;
+      currencyContractAddress: string;
+      price: string;
+      startDate: Date;
+      endDate: Date;
+    }
+  ],
+};
+
+type SixBatchFormData = {
+  listings: [
+    {
+      nftContractAddress: string;
+      tokenId: string;
+      currencyContractAddress: string;
+      price: string;
+      startDate: Date;
+      endDate: Date;
+    },
+    {
+      nftContractAddress: string;
+      tokenId: string;
+      currencyContractAddress: string;
+      price: string;
+      startDate: Date;
+      endDate: Date;
+    },
+    {
+      nftContractAddress: string;
+      tokenId: string;
+      currencyContractAddress: string;
+      price: string;
+      startDate: Date;
+      endDate: Date;
+    },
+    {
+      nftContractAddress: string;
+      tokenId: string;
+      currencyContractAddress: string;
+      price: string;
+      startDate: Date;
+      endDate: Date;
+    },
+    {
+      nftContractAddress: string;
+      tokenId: string;
+      currencyContractAddress: string;
+      price: string;
+      startDate: Date;
+      endDate: Date;
+    },
+    {
+      nftContractAddress: string;
+      tokenId: string;
+      currencyContractAddress: string;
+      price: string;
+      startDate: Date;
+      endDate: Date;
+    }
+  ],
+};
+
+type SevenBatchFormData = {
+  listings: [
+    {
+      nftContractAddress: string;
+      tokenId: string;
+      currencyContractAddress: string;
+      price: string;
+      startDate: Date;
+      endDate: Date;
+    },
+    {
+      nftContractAddress: string;
+      tokenId: string;
+      currencyContractAddress: string;
+      price: string;
+      startDate: Date;
+      endDate: Date;
+    },
+    {
+      nftContractAddress: string;
+      tokenId: string;
+      currencyContractAddress: string;
+      price: string;
+      startDate: Date;
+      endDate: Date;
+    },
+    {
+      nftContractAddress: string;
+      tokenId: string;
+      currencyContractAddress: string;
+      price: string;
+      startDate: Date;
+      endDate: Date;
+    },
+    {
+      nftContractAddress: string;
+      tokenId: string;
+      currencyContractAddress: string;
+      price: string;
+      startDate: Date;
+      endDate: Date;
+    },
+    {
+      nftContractAddress: string;
+      tokenId: string;
+      currencyContractAddress: string;
+      price: string;
+      startDate: Date;
+      endDate: Date;
+    },
+    {
+      nftContractAddress: string;
+      tokenId: string;
+      currencyContractAddress: string;
+      price: string;
+      startDate: Date;
+      endDate: Date;
+    }
+  ],
+};
+
+type EightBatchFormData = {
+  listings: [
+    {
+      nftContractAddress: string;
+      tokenId: string;
+      currencyContractAddress: string;
+      price: string;
+      startDate: Date;
+      endDate: Date;
+    },
+    {
+      nftContractAddress: string;
+      tokenId: string;
+      currencyContractAddress: string;
+      price: string;
+      startDate: Date;
+      endDate: Date;
+    },
+    {
+      nftContractAddress: string;
+      tokenId: string;
+      currencyContractAddress: string;
+      price: string;
+      startDate: Date;
+      endDate: Date;
+    },
+    {
+      nftContractAddress: string;
+      tokenId: string;
+      currencyContractAddress: string;
+      price: string;
+      startDate: Date;
+      endDate: Date;
+    },
+    {
+      nftContractAddress: string;
+      tokenId: string;
+      currencyContractAddress: string;
+      price: string;
+      startDate: Date;
+      endDate: Date;
+    },
+    {
+      nftContractAddress: string;
+      tokenId: string;
+      currencyContractAddress: string;
+      price: string;
+      startDate: Date;
+      endDate: Date;
+    },
+    {
+      nftContractAddress: string;
+      tokenId: string;
+      currencyContractAddress: string;
+      price: string;
+      startDate: Date;
+      endDate: Date;
+    },
+    {
+      nftContractAddress: string;
+      tokenId: string;
+      currencyContractAddress: string;
+      price: string;
+      startDate: Date;
+      endDate: Date;
+    }
+  ],
+};
+
+type NineBatchFormData = {
+  listings: [
+    {
+      nftContractAddress: string;
+      tokenId: string;
+      currencyContractAddress: string;
+      price: string;
+      startDate: Date;
+      endDate: Date;
+    },
+    {
+      nftContractAddress: string;
+      tokenId: string;
+      currencyContractAddress: string;
+      price: string;
+      startDate: Date;
+      endDate: Date;
+    },
+    {
+      nftContractAddress: string;
+      tokenId: string;
+      currencyContractAddress: string;
+      price: string;
+      startDate: Date;
+      endDate: Date;
+    },
+    {
+      nftContractAddress: string;
+      tokenId: string;
+      currencyContractAddress: string;
+      price: string;
+      startDate: Date;
+      endDate: Date;
+    },
+    {
+      nftContractAddress: string;
+      tokenId: string;
+      currencyContractAddress: string;
+      price: string;
+      startDate: Date;
+      endDate: Date;
+    },
+    {
+      nftContractAddress: string;
+      tokenId: string;
+      currencyContractAddress: string;
+      price: string;
+      startDate: Date;
+      endDate: Date;
+    },
+    {
+      nftContractAddress: string;
+      tokenId: string;
+      currencyContractAddress: string;
+      price: string;
+      startDate: Date;
+      endDate: Date;
+    },
+    {
+      nftContractAddress: string;
+      tokenId: string;
+      currencyContractAddress: string;
+      price: string;
+      startDate: Date;
+      endDate: Date;
+    },
+    {
+      nftContractAddress: string;
+      tokenId: string;
+      currencyContractAddress: string;
+      price: string;
+      startDate: Date;
+      endDate: Date;
+    }
+  ],
+};
+
+type TenBatchFormData = {
+  listings: [
+    {
+      nftContractAddress: string;
+      tokenId: string;
+      currencyContractAddress: string;
+      price: string;
+      startDate: Date;
+      endDate: Date;
+    },
+    {
+      nftContractAddress: string;
+      tokenId: string;
+      currencyContractAddress: string;
+      price: string;
+      startDate: Date;
+      endDate: Date;
+    },
+    {
+      nftContractAddress: string;
+      tokenId: string;
+      currencyContractAddress: string;
+      price: string;
+      startDate: Date;
+      endDate: Date;
+    },
+    {
+      nftContractAddress: string;
+      tokenId: string;
+      currencyContractAddress: string;
+      price: string;
+      startDate: Date;
+      endDate: Date;
+    },
+    {
+      nftContractAddress: string;
+      tokenId: string;
+      currencyContractAddress: string;
+      price: string;
+      startDate: Date;
+      endDate: Date;
+    },
+    {
+      nftContractAddress: string;
+      tokenId: string;
+      currencyContractAddress: string;
+      price: string;
+      startDate: Date;
+      endDate: Date;
+    },
+    {
+      nftContractAddress: string;
+      tokenId: string;
+      currencyContractAddress: string;
+      price: string;
+      startDate: Date;
+      endDate: Date;
+    },
+    {
+      nftContractAddress: string;
+      tokenId: string;
+      currencyContractAddress: string;
+      price: string;
+      startDate: Date;
+      endDate: Date;
+    },
+    {
+      nftContractAddress: string;
+      tokenId: string;
+      currencyContractAddress: string;
+      price: string;
+      startDate: Date;
+      endDate: Date;
+    },
+    {
+      nftContractAddress: string;
+      tokenId: string;
+      currencyContractAddress: string;
+      price: string;
+      startDate: Date;
+      endDate: Date;
+    }
+  ],
+};
+
 export default function SaleInfo({ nft }: Props) {
   const router = useRouter();
   // Connect to marketplace contract
   const { contract: marketplace } = useContract(
-    ETH_MARKETPLACE_ADDRESS,
+    POLY_MARKETPLACE_ADDRESS,
     "marketplace-v3"
   );
 
@@ -66,7 +544,7 @@ export default function SaleInfo({ nft }: Props) {
   const [tab, setTab] = useState<"direct" | "auction" | "Floor-crapper 420">("direct");
 
   // Manage form batch listing amount using tabs and conditional rendering
-  const [dumpTab, setDumpTab] = useState<"1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10" | "11" | "12" | "13" | "14" | "15" | "16" | "17" | "18" | "19" | "20">("1");
+  const [dumpTab, setDumpTab] = useState<"2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10" | "11" | "12" | "13" | "14" | "15" | "16" | "17" | "18" | "19" | "20">("2");
 
   // Manage form values using react-hook-form library: Auction form
   const { register: registerAuction, handleSubmit: handleSubmitAuction } =
@@ -76,7 +554,7 @@ export default function SaleInfo({ nft }: Props) {
         tokenId: nft.metadata.id,
         startDate: new Date(),
         endDate: new Date(),
-        currencyContractAddress: "0x72F60F2F9695C5911bA57ee43339AD82ce8ABB6A",
+        currencyContractAddress: TUSDC_FOR_MUMBAI,
         floorPrice: "0",
         buyoutPrice: "0",
       },
@@ -88,14 +566,14 @@ export default function SaleInfo({ nft }: Props) {
     const hasApproval = await nftCollection?.call(
       "isApprovedForAll",
       [nft.owner,
-      ETH_MARKETPLACE_ADDRESS]
+      POLY_MARKETPLACE_ADDRESS]
     );
 
     // If it is, provide approval
     if (!hasApproval) {
       const txResult = await nftCollection?.call(
         "setApprovalForAll",
-       [ ETH_MARKETPLACE_ADDRESS,
+       [ POLY_MARKETPLACE_ADDRESS,
         true]
       );
 
@@ -119,7 +597,7 @@ export default function SaleInfo({ nft }: Props) {
         tokenId: nft.metadata.id,
         startDate: new Date(),
         endDate: new Date(),
-        currencyContractAddress: "0x72F60F2F9695C5911bA57ee43339AD82ce8ABB6A",
+        currencyContractAddress: TUSDC_FOR_MUMBAI,
         price: "0",
       },
     });
@@ -153,30 +631,597 @@ export default function SaleInfo({ nft }: Props) {
     return txResult;
   }
 
-    // Manage form values using react-hook-form library: Direct form
+    // Manage form values using react-hook-form library: Direct form for batch sell
+    // Two listings
     const { register: registerBatch2, handleSubmit: handleSubmitBatch2 } =
-    useForm<DirectFormData>({
+    useForm<TwoBatchFormData>({
       defaultValues: {
-        nftContractAddress: ETHDrop,
-        tokenId: nft.metadata.id,
-        startDate: new Date(),
-        endDate: new Date(),
-        currencyContractAddress: "0x72F60F2F9695C5911bA57ee43339AD82ce8ABB6A",
-        price: "0",
-      },
+        listings: [
+          {
+            nftContractAddress: ETHDrop,
+            tokenId: "0",
+            startDate: new Date(),
+            endDate: new Date(),
+            currencyContractAddress: TUSDC_FOR_MUMBAI,
+            price: "0",
+          },
+          {
+            nftContractAddress: ETHDrop,
+            tokenId: "0",
+            startDate: new Date(),
+            endDate: new Date(),
+            currencyContractAddress: TUSDC_FOR_MUMBAI,
+            price: "0",
+          }
+        ]
+      }
     });
 
-  function createListingArray(data: DirectFormData, count: number) {
-    const listings = [];
+    function createListingArray2(data: TwoBatchFormData) {
+     let listings = [];
+     let counterI= 0;
+     for (var i in data.listings){
+     console.log(
+      data.listings[i].nftContractAddress,
+      data.listings[i].tokenId,
+      data.listings[i].currencyContractAddress,
+      data.listings[i].price,
+      data.listings[i].startDate,
+      data.listings[i].endDate,
+      );
+      counterI+=1;
+        const listing = {
+          assetContractAddress: data.listings[i].nftContractAddress,
+          tokenId: data.listings[i].tokenId,
+          currencyContractAddress: data.listings[i].currencyContractAddress,
+          pricePerToken: data.listings[i].price,
+          startTimestamp: new Date(data.listings[i].startDate),
+          endTimestamp: new Date(data.listings[i].endDate),
+        };
+        listings.push(listing);
+      }
+    
+      return listings;
+    }
+    
+
+  async function handleSubmissionBatch2(data: TwoBatchFormData) {
+    const listings = createListingArray2(data)
+    await checkAndProvideApproval();
+    const txResult = await marketplace?.directListings.createListingsBatch(listings);
+    console.log(listings)
   
-    for (let i = 0; i < count; i++) {
+    return txResult;
+  }
+
+  //Three Listings
+  const { register: registerBatch3, handleSubmit: handleSubmitBatch3 } =
+  useForm<ThreeBatchFormData>({
+    defaultValues: {
+      listings: [
+        {
+          nftContractAddress: ETHDrop,
+          tokenId: "0",
+          startDate: new Date(),
+          endDate: new Date(),
+          currencyContractAddress: TUSDC_FOR_MUMBAI,
+          price: "0",
+        },
+        {
+          nftContractAddress: ETHDrop,
+          tokenId: "0",
+          startDate: new Date(),
+          endDate: new Date(),
+          currencyContractAddress: TUSDC_FOR_MUMBAI,
+          price: "0",
+        },
+        {
+          nftContractAddress: ETHDrop,
+          tokenId: "0",
+          startDate: new Date(),
+          endDate: new Date(),
+          currencyContractAddress: TUSDC_FOR_MUMBAI,
+          price: "0",
+        }
+      ]
+    }
+  });
+
+  function createListingArray3(data: ThreeBatchFormData) {
+   let listings = [];
+   let counterI= 0;
+   for (var i in data.listings){
+   console.log(
+    data.listings[i].nftContractAddress,
+    data.listings[i].tokenId,
+    data.listings[i].currencyContractAddress,
+    data.listings[i].price,
+    data.listings[i].startDate,
+    data.listings[i].endDate,
+    );
+    counterI+=1;
       const listing = {
-        assetContractAddress: data.nftContractAddress,
-        tokenId: data.tokenId,
-        currencyContractAddress: data.currencyContractAddress,
-        pricePerToken: data.price,
-        startTimestamp: new Date(data.startDate),
-        endTimestamp: new Date(data.endDate),
+        assetContractAddress: data.listings[i].nftContractAddress,
+        tokenId: data.listings[i].tokenId,
+        currencyContractAddress: data.listings[i].currencyContractAddress,
+        pricePerToken: data.listings[i].price,
+        startTimestamp: new Date(data.listings[i].startDate),
+        endTimestamp: new Date(data.listings[i].endDate),
+      };
+      listings.push(listing);
+    }
+  
+    return listings;
+  }
+  
+
+
+async function handleSubmissionBatch3(data: ThreeBatchFormData) {
+  const listings = createListingArray3(data)
+  await checkAndProvideApproval();
+  const txResult = await marketplace?.directListings.createListingsBatch(listings);
+  console.log(listings)
+
+  return txResult;
+}
+
+  //Four Listings
+  const { register: registerBatch4, handleSubmit: handleSubmitBatch4 } =
+  useForm<FourBatchFormData>({
+    defaultValues: {
+      listings: [
+        {
+          nftContractAddress: ETHDrop,
+          tokenId: "0",
+          startDate: new Date(),
+          endDate: new Date(),
+          currencyContractAddress: TUSDC_FOR_MUMBAI,
+          price: "0",
+        },
+        {
+          nftContractAddress: ETHDrop,
+          tokenId: "0",
+          startDate: new Date(),
+          endDate: new Date(),
+          currencyContractAddress: TUSDC_FOR_MUMBAI,
+          price: "0",
+        },
+        {
+          nftContractAddress: ETHDrop,
+          tokenId: "0",
+          startDate: new Date(),
+          endDate: new Date(),
+          currencyContractAddress: TUSDC_FOR_MUMBAI,
+          price: "0",
+        },
+        {
+          nftContractAddress: ETHDrop,
+          tokenId: "0",
+          startDate: new Date(),
+          endDate: new Date(),
+          currencyContractAddress: TUSDC_FOR_MUMBAI,
+          price: "0",
+        }
+      ]
+    }
+  });
+
+  function createListingArray4(data: FourBatchFormData) {
+   let listings = [];
+   let counterI= 0;
+   for (var i in data.listings){
+   console.log(
+    data.listings[i].nftContractAddress,
+    data.listings[i].tokenId,
+    data.listings[i].currencyContractAddress,
+    data.listings[i].price,
+    data.listings[i].startDate,
+    data.listings[i].endDate,
+    );
+    counterI+=1;
+      const listing = {
+        assetContractAddress: data.listings[i].nftContractAddress,
+        tokenId: data.listings[i].tokenId,
+        currencyContractAddress: data.listings[i].currencyContractAddress,
+        pricePerToken: data.listings[i].price,
+        startTimestamp: new Date(data.listings[i].startDate),
+        endTimestamp: new Date(data.listings[i].endDate),
+      };
+      listings.push(listing);
+    }
+  
+    return listings;
+  }
+  
+
+
+async function handleSubmissionBatch4(data: FourBatchFormData) {
+  const listings = createListingArray4(data)
+  await checkAndProvideApproval();
+  const txResult = await marketplace?.directListings.createListingsBatch(listings);
+  console.log(listings)
+
+  return txResult;
+}
+
+  //Five Listings
+  const { register: registerBatch5, handleSubmit: handleSubmitBatch5 } =
+  useForm<FiveBatchFormData>({
+    defaultValues: {
+      listings: [
+        {
+          nftContractAddress: ETHDrop,
+          tokenId: "0",
+          startDate: new Date(),
+          endDate: new Date(),
+          currencyContractAddress: TUSDC_FOR_MUMBAI,
+          price: "0",
+        },
+        {
+          nftContractAddress: ETHDrop,
+          tokenId: "0",
+          startDate: new Date(),
+          endDate: new Date(),
+          currencyContractAddress: TUSDC_FOR_MUMBAI,
+          price: "0",
+        },
+        {
+          nftContractAddress: ETHDrop,
+          tokenId: "0",
+          startDate: new Date(),
+          endDate: new Date(),
+          currencyContractAddress: TUSDC_FOR_MUMBAI,
+          price: "0",
+        },
+        {
+          nftContractAddress: ETHDrop,
+          tokenId: "0",
+          startDate: new Date(),
+          endDate: new Date(),
+          currencyContractAddress: TUSDC_FOR_MUMBAI,
+          price: "0",
+        },
+        {
+          nftContractAddress: ETHDrop,
+          tokenId: "0",
+          startDate: new Date(),
+          endDate: new Date(),
+          currencyContractAddress: TUSDC_FOR_MUMBAI,
+          price: "0",
+        }
+      ]
+    }
+  });
+
+  function createListingArray5(data: FiveBatchFormData) {
+   let listings = [];
+   let counterI= 0;
+   for (var i in data.listings){
+   console.log(
+    data.listings[i].nftContractAddress,
+    data.listings[i].tokenId,
+    data.listings[i].currencyContractAddress,
+    data.listings[i].price,
+    data.listings[i].startDate,
+    data.listings[i].endDate,
+    );
+    counterI+=1;
+      const listing = {
+        assetContractAddress: data.listings[i].nftContractAddress,
+        tokenId: data.listings[i].tokenId,
+        currencyContractAddress: data.listings[i].currencyContractAddress,
+        pricePerToken: data.listings[i].price,
+        startTimestamp: new Date(data.listings[i].startDate),
+        endTimestamp: new Date(data.listings[i].endDate),
+      };
+      listings.push(listing);
+    }
+  
+    return listings;
+  }
+  
+
+
+async function handleSubmissionBatch5(data: FiveBatchFormData) {
+  const listings = createListingArray5(data)
+  await checkAndProvideApproval();
+  const txResult = await marketplace?.directListings.createListingsBatch(listings);
+  console.log(listings)
+
+  return txResult;
+}
+
+  //Six Listings
+  const { register: registerBatch6, handleSubmit: handleSubmitBatch6 } =
+  useForm<SixBatchFormData>({
+    defaultValues: {
+      listings: [
+        {
+          nftContractAddress: ETHDrop,
+          tokenId: "0",
+          startDate: new Date(),
+          endDate: new Date(),
+          currencyContractAddress: TUSDC_FOR_MUMBAI,
+          price: "0",
+        },
+        {
+          nftContractAddress: ETHDrop,
+          tokenId: "0",
+          startDate: new Date(),
+          endDate: new Date(),
+          currencyContractAddress: TUSDC_FOR_MUMBAI,
+          price: "0",
+        },
+        {
+          nftContractAddress: ETHDrop,
+          tokenId: "0",
+          startDate: new Date(),
+          endDate: new Date(),
+          currencyContractAddress: TUSDC_FOR_MUMBAI,
+          price: "0",
+        },
+        {
+          nftContractAddress: ETHDrop,
+          tokenId: "0",
+          startDate: new Date(),
+          endDate: new Date(),
+          currencyContractAddress: TUSDC_FOR_MUMBAI,
+          price: "0",
+        },
+        {
+          nftContractAddress: ETHDrop,
+          tokenId: "0",
+          startDate: new Date(),
+          endDate: new Date(),
+          currencyContractAddress: TUSDC_FOR_MUMBAI,
+          price: "0",
+        },
+        {
+          nftContractAddress: ETHDrop,
+          tokenId: "0",
+          startDate: new Date(),
+          endDate: new Date(),
+          currencyContractAddress: TUSDC_FOR_MUMBAI,
+          price: "0",
+        }
+      ]
+    }
+  });
+
+  function createListingArray6(data: SixBatchFormData) {
+   let listings = [];
+   let counterI= 0;
+   for (var i in data.listings){
+   console.log(
+    data.listings[i].nftContractAddress,
+    data.listings[i].tokenId,
+    data.listings[i].currencyContractAddress,
+    data.listings[i].price,
+    data.listings[i].startDate,
+    data.listings[i].endDate,
+    );
+    counterI+=1;
+      const listing = {
+        assetContractAddress: data.listings[i].nftContractAddress,
+        tokenId: data.listings[i].tokenId,
+        currencyContractAddress: data.listings[i].currencyContractAddress,
+        pricePerToken: data.listings[i].price,
+        startTimestamp: new Date(data.listings[i].startDate),
+        endTimestamp: new Date(data.listings[i].endDate),
+      };
+      listings.push(listing);
+    }
+  
+    return listings;
+  }
+  
+
+
+async function handleSubmissionBatch6(data: SixBatchFormData) {
+  const listings = createListingArray6(data)
+  await checkAndProvideApproval();
+  const txResult = await marketplace?.directListings.createListingsBatch(listings);
+  console.log(listings)
+
+  return txResult;
+}
+
+  //Seven Listings
+  const { register: registerBatch7, handleSubmit: handleSubmitBatch7 } =
+  useForm<SevenBatchFormData>({
+    defaultValues: {
+      listings: [
+        {
+          nftContractAddress: ETHDrop,
+          tokenId: "0",
+          startDate: new Date(),
+          endDate: new Date(),
+          currencyContractAddress: TUSDC_FOR_MUMBAI,
+          price: "0",
+        },
+        {
+          nftContractAddress: ETHDrop,
+          tokenId: "0",
+          startDate: new Date(),
+          endDate: new Date(),
+          currencyContractAddress: TUSDC_FOR_MUMBAI,
+          price: "0",
+        },
+        {
+          nftContractAddress: ETHDrop,
+          tokenId: "0",
+          startDate: new Date(),
+          endDate: new Date(),
+          currencyContractAddress: TUSDC_FOR_MUMBAI,
+          price: "0",
+        },
+        {
+          nftContractAddress: ETHDrop,
+          tokenId: "0",
+          startDate: new Date(),
+          endDate: new Date(),
+          currencyContractAddress: TUSDC_FOR_MUMBAI,
+          price: "0",
+        },
+        {
+          nftContractAddress: ETHDrop,
+          tokenId: "0",
+          startDate: new Date(),
+          endDate: new Date(),
+          currencyContractAddress: TUSDC_FOR_MUMBAI,
+          price: "0",
+        },
+        {
+          nftContractAddress: ETHDrop,
+          tokenId: "0",
+          startDate: new Date(),
+          endDate: new Date(),
+          currencyContractAddress: TUSDC_FOR_MUMBAI,
+          price: "0",
+        },
+        {
+          nftContractAddress: ETHDrop,
+          tokenId: "0",
+          startDate: new Date(),
+          endDate: new Date(),
+          currencyContractAddress: TUSDC_FOR_MUMBAI,
+          price: "0",
+        }
+      ]
+    }
+  });
+
+  function createListingArray7(data: SevenBatchFormData) {
+   let listings = [];
+   let counterI= 0;
+   for (var i in data.listings){
+   console.log(
+    data.listings[i].nftContractAddress,
+    data.listings[i].tokenId,
+    data.listings[i].currencyContractAddress,
+    data.listings[i].price,
+    data.listings[i].startDate,
+    data.listings[i].endDate,
+    );
+    counterI+=1;
+      const listing = {
+        assetContractAddress: data.listings[i].nftContractAddress,
+        tokenId: data.listings[i].tokenId,
+        currencyContractAddress: data.listings[i].currencyContractAddress,
+        pricePerToken: data.listings[i].price,
+        startTimestamp: new Date(data.listings[i].startDate),
+        endTimestamp: new Date(data.listings[i].endDate),
+      };
+      listings.push(listing);
+    }
+  
+    return listings;
+  }
+  
+
+
+async function handleSubmissionBatch7(data: SevenBatchFormData) {
+  const listings = createListingArray7(data)
+  await checkAndProvideApproval();
+  const txResult = await marketplace?.directListings.createListingsBatch(listings);
+  console.log(listings)
+
+  return txResult;
+}
+
+  //Eight Listings
+  const { register: registerBatch8, handleSubmit: handleSubmitBatch8 } =
+  useForm<EightBatchFormData>({
+    defaultValues: {
+      listings: [
+        {
+          nftContractAddress: ETHDrop,
+          tokenId: "0",
+          startDate: new Date(),
+          endDate: new Date(),
+          currencyContractAddress: TUSDC_FOR_MUMBAI,
+          price: "0",
+        },
+        {
+          nftContractAddress: ETHDrop,
+          tokenId: "0",
+          startDate: new Date(),
+          endDate: new Date(),
+          currencyContractAddress: TUSDC_FOR_MUMBAI,
+          price: "0",
+        },
+        {
+          nftContractAddress: ETHDrop,
+          tokenId: "0",
+          startDate: new Date(),
+          endDate: new Date(),
+          currencyContractAddress: TUSDC_FOR_MUMBAI,
+          price: "0",
+        },
+        {
+          nftContractAddress: ETHDrop,
+          tokenId: "0",
+          startDate: new Date(),
+          endDate: new Date(),
+          currencyContractAddress: TUSDC_FOR_MUMBAI,
+          price: "0",
+        },
+        {
+          nftContractAddress: ETHDrop,
+          tokenId: "0",
+          startDate: new Date(),
+          endDate: new Date(),
+          currencyContractAddress: TUSDC_FOR_MUMBAI,
+          price: "0",
+        },
+        {
+          nftContractAddress: ETHDrop,
+          tokenId: "0",
+          startDate: new Date(),
+          endDate: new Date(),
+          currencyContractAddress: TUSDC_FOR_MUMBAI,
+          price: "0",
+        },
+        {
+          nftContractAddress: ETHDrop,
+          tokenId: "0",
+          startDate: new Date(),
+          endDate: new Date(),
+          currencyContractAddress: TUSDC_FOR_MUMBAI,
+          price: "0",
+        },
+        {
+          nftContractAddress: ETHDrop,
+          tokenId: "0",
+          startDate: new Date(),
+          endDate: new Date(),
+          currencyContractAddress: TUSDC_FOR_MUMBAI,
+          price: "0",
+        }
+      ]
+    }
+  });
+
+  function createListingArray8(data: EightBatchFormData) {
+   let listings = [];
+   let counterI= 0;
+   for (var i in data.listings){
+   console.log(
+    data.listings[i].nftContractAddress,
+    data.listings[i].tokenId,
+    data.listings[i].currencyContractAddress,
+    data.listings[i].price,
+    data.listings[i].startDate,
+    data.listings[i].endDate,
+    );
+    counterI+=1;
+      const listing = {
+        assetContractAddress: data.listings[i].nftContractAddress,
+        tokenId: data.listings[i].tokenId,
+        currencyContractAddress: data.listings[i].currencyContractAddress,
+        pricePerToken: data.listings[i].price,
+        startTimestamp: new Date(data.listings[i].startDate),
+        endTimestamp: new Date(data.listings[i].endDate),
       };
       listings.push(listing);
     }
@@ -184,13 +1229,259 @@ export default function SaleInfo({ nft }: Props) {
     return listings;
   }
 
-  async function handleSubmissionBatch(data: DirectFormData, count: number) {
-    const listings = createListingArray(data, count);
-    await checkAndProvideApproval();
-    const txResult = await marketplace?.directListings.createListingsBatch(listings);
+
+async function handleSubmissionBatch8(data: EightBatchFormData) {
+  const listings = createListingArray8(data)
+  await checkAndProvideApproval();
+  const txResult = await marketplace?.directListings.createListingsBatch(listings);
+  console.log(listings)
+
+  return txResult;
+}
+
+  //Nine Listings
+  const { register: registerBatch9, handleSubmit: handleSubmitBatch9 } =
+  useForm<NineBatchFormData>({
+    defaultValues: {
+      listings: [
+        {
+          nftContractAddress: ETHDrop,
+          tokenId: "0",
+          startDate: new Date(),
+          endDate: new Date(),
+          currencyContractAddress: TUSDC_FOR_MUMBAI,
+          price: "0",
+        },
+        {
+          nftContractAddress: ETHDrop,
+          tokenId: "0",
+          startDate: new Date(),
+          endDate: new Date(),
+          currencyContractAddress: TUSDC_FOR_MUMBAI,
+          price: "0",
+        },
+        {
+          nftContractAddress: ETHDrop,
+          tokenId: "0",
+          startDate: new Date(),
+          endDate: new Date(),
+          currencyContractAddress: TUSDC_FOR_MUMBAI,
+          price: "0",
+        },
+        {
+          nftContractAddress: ETHDrop,
+          tokenId: "0",
+          startDate: new Date(),
+          endDate: new Date(),
+          currencyContractAddress: TUSDC_FOR_MUMBAI,
+          price: "0",
+        },
+        {
+          nftContractAddress: ETHDrop,
+          tokenId: "0",
+          startDate: new Date(),
+          endDate: new Date(),
+          currencyContractAddress: TUSDC_FOR_MUMBAI,
+          price: "0",
+        },
+        {
+          nftContractAddress: ETHDrop,
+          tokenId: "0",
+          startDate: new Date(),
+          endDate: new Date(),
+          currencyContractAddress: TUSDC_FOR_MUMBAI,
+          price: "0",
+        },
+        {
+          nftContractAddress: ETHDrop,
+          tokenId: "0",
+          startDate: new Date(),
+          endDate: new Date(),
+          currencyContractAddress: TUSDC_FOR_MUMBAI,
+          price: "0",
+        },
+        {
+          nftContractAddress: ETHDrop,
+          tokenId: "0",
+          startDate: new Date(),
+          endDate: new Date(),
+          currencyContractAddress: TUSDC_FOR_MUMBAI,
+          price: "0",
+        },
+        {
+          nftContractAddress: ETHDrop,
+          tokenId: "0",
+          startDate: new Date(),
+          endDate: new Date(),
+          currencyContractAddress: TUSDC_FOR_MUMBAI,
+          price: "0",
+        }
+      ]
+    }
+  });
+
+  function createListingArray9(data: NineBatchFormData) {
+   let listings = [];
+   let counterI= 0;
+   for (var i in data.listings){
+   console.log(
+    data.listings[i].nftContractAddress,
+    data.listings[i].tokenId,
+    data.listings[i].currencyContractAddress,
+    data.listings[i].price,
+    data.listings[i].startDate,
+    data.listings[i].endDate,
+    );
+    counterI+=1;
+      const listing = {
+        assetContractAddress: data.listings[i].nftContractAddress,
+        tokenId: data.listings[i].tokenId,
+        currencyContractAddress: data.listings[i].currencyContractAddress,
+        pricePerToken: data.listings[i].price,
+        startTimestamp: new Date(data.listings[i].startDate),
+        endTimestamp: new Date(data.listings[i].endDate),
+      };
+      listings.push(listing);
+    }
   
-    return txResult;
+    return listings;
   }
+
+
+async function handleSubmissionBatch9(data: NineBatchFormData) {
+  const listings = createListingArray9(data)
+  await checkAndProvideApproval();
+  const txResult = await marketplace?.directListings.createListingsBatch(listings);
+  console.log(listings)
+
+  return txResult;
+}
+
+  //Ten Listings
+  const { register: registerBatch10, handleSubmit: handleSubmitBatch10 } =
+  useForm<TenBatchFormData>({
+    defaultValues: {
+      listings: [
+        {
+          nftContractAddress: ETHDrop,
+          tokenId: "0",
+          startDate: new Date(),
+          endDate: new Date(),
+          currencyContractAddress: TUSDC_FOR_MUMBAI,
+          price: "0",
+        },
+        {
+          nftContractAddress: ETHDrop,
+          tokenId: "0",
+          startDate: new Date(),
+          endDate: new Date(),
+          currencyContractAddress: TUSDC_FOR_MUMBAI,
+          price: "0",
+        },
+        {
+          nftContractAddress: ETHDrop,
+          tokenId: "0",
+          startDate: new Date(),
+          endDate: new Date(),
+          currencyContractAddress: TUSDC_FOR_MUMBAI,
+          price: "0",
+        },
+        {
+          nftContractAddress: ETHDrop,
+          tokenId: "0",
+          startDate: new Date(),
+          endDate: new Date(),
+          currencyContractAddress: TUSDC_FOR_MUMBAI,
+          price: "0",
+        },
+        {
+          nftContractAddress: ETHDrop,
+          tokenId: "0",
+          startDate: new Date(),
+          endDate: new Date(),
+          currencyContractAddress: TUSDC_FOR_MUMBAI,
+          price: "0",
+        },
+        {
+          nftContractAddress: ETHDrop,
+          tokenId: "0",
+          startDate: new Date(),
+          endDate: new Date(),
+          currencyContractAddress: TUSDC_FOR_MUMBAI,
+          price: "0",
+        },
+        {
+          nftContractAddress: ETHDrop,
+          tokenId: "0",
+          startDate: new Date(),
+          endDate: new Date(),
+          currencyContractAddress: TUSDC_FOR_MUMBAI,
+          price: "0",
+        },
+        {
+          nftContractAddress: ETHDrop,
+          tokenId: "0",
+          startDate: new Date(),
+          endDate: new Date(),
+          currencyContractAddress: TUSDC_FOR_MUMBAI,
+          price: "0",
+        },
+        {
+          nftContractAddress: ETHDrop,
+          tokenId: "0",
+          startDate: new Date(),
+          endDate: new Date(),
+          currencyContractAddress: TUSDC_FOR_MUMBAI,
+          price: "0",
+        },
+        {
+          nftContractAddress: ETHDrop,
+          tokenId: "0",
+          startDate: new Date(),
+          endDate: new Date(),
+          currencyContractAddress: TUSDC_FOR_MUMBAI,
+          price: "0",
+        }
+      ]
+    }
+  });
+
+  function createListingArray10(data: TenBatchFormData) {
+   let listings = [];
+   let counterI= 0;
+   for (var i in data.listings){
+   console.log(
+    data.listings[i].nftContractAddress,
+    data.listings[i].tokenId,
+    data.listings[i].currencyContractAddress,
+    data.listings[i].price,
+    data.listings[i].startDate,
+    data.listings[i].endDate,
+    );
+    counterI+=1;
+      const listing = {
+        assetContractAddress: data.listings[i].nftContractAddress,
+        tokenId: data.listings[i].tokenId,
+        currencyContractAddress: data.listings[i].currencyContractAddress,
+        pricePerToken: data.listings[i].price,
+        startTimestamp: new Date(data.listings[i].startDate),
+        endTimestamp: new Date(data.listings[i].endDate),
+      };
+      listings.push(listing);
+    }
+  
+    return listings;
+  }
+
+
+async function handleSubmissionBatch10(data: TenBatchFormData) {
+  const listings = createListingArray10(data)
+  await checkAndProvideApproval();
+  const txResult = await marketplace?.directListings.createListingsBatch(listings);
+  console.log(listings)
+
+  return txResult;
+}
 
   return (
     <>
@@ -260,7 +1551,7 @@ export default function SaleInfo({ nft }: Props) {
           />
 
           <Web3Button
-            contractAddress={ETH_MARKETPLACE_ADDRESS}
+            contractAddress={POLY_MARKETPLACE_ADDRESS}
             action={async () => {
               await handleSubmitDirect(handleSubmissionDirect)();
             }}
@@ -338,7 +1629,7 @@ export default function SaleInfo({ nft }: Props) {
           />
 
           <Web3Button
-            contractAddress={ETH_MARKETPLACE_ADDRESS}
+            contractAddress={POLY_MARKETPLACE_ADDRESS}
             action={async () => {
               return await handleSubmitAuction(handleSubmissionAuction)();
             }}
@@ -438,76 +1729,6 @@ export default function SaleInfo({ nft }: Props) {
           >
             10
           </h3>
-          <h3
-            className={`${profileStyles.tab2} 
-        ${dumpTab === "11" ? profileStyles.activeTab : ""}`}
-            onClick={() => setDumpTab("11")}
-          >
-            11
-          </h3>
-          <h3
-            className={`${profileStyles.tab2} 
-        ${dumpTab === "12" ? profileStyles.activeTab : ""}`}
-            onClick={() => setDumpTab("12")}
-          >
-            12
-          </h3>
-          <h3
-            className={`${profileStyles.tab2} 
-        ${dumpTab === "13" ? profileStyles.activeTab : ""}`}
-            onClick={() => setDumpTab("13")}
-          >
-            13
-          </h3>
-          <h3
-            className={`${profileStyles.tab2} 
-        ${dumpTab === "14" ? profileStyles.activeTab : ""}`}
-            onClick={() => setDumpTab("14")}
-          >
-            14
-          </h3>
-          <h3
-            className={`${profileStyles.tab2} 
-        ${dumpTab === "15" ? profileStyles.activeTab : ""}`}
-            onClick={() => setDumpTab("15")}
-          >
-            15
-          </h3>
-          <h3
-            className={`${profileStyles.tab2} 
-        ${dumpTab === "16" ? profileStyles.activeTab : ""}`}
-            onClick={() => setDumpTab("16")}
-          >
-            16
-          </h3>
-          <h3
-            className={`${profileStyles.tab2} 
-        ${dumpTab === "17" ? profileStyles.activeTab : ""}`}
-            onClick={() => setDumpTab("17")}
-          >
-            17
-          </h3>
-          <h3
-            className={`${profileStyles.tab2} 
-        ${dumpTab === "18" ? profileStyles.activeTab : ""}`}
-            onClick={() => setDumpTab("18")}
-          >
-            18
-          </h3>
-          <h3
-            className={`${profileStyles.tab2} 
-        ${dumpTab === "19" ? profileStyles.activeTab : ""}`}
-            onClick={() => setDumpTab("19")}
-          >
-            19
-          </h3>
-          <h3
-            className={`${profileStyles.tab2} 
-        ${dumpTab === "20" ? profileStyles.activeTab : ""}`}
-            onClick={() => setDumpTab("20")}
-          >
-            20
-          </h3>
         </div>
         {/* Batch listing 2 */}
         <div
@@ -520,6 +1741,14 @@ export default function SaleInfo({ nft }: Props) {
         >
 
           <h5 className={styles.formSectionTitle}>listing 1</h5>
+          {/* Input field for token Id to sell */}
+          <legend className={styles.legend}> Token ID </legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={1.000000}
+            {...registerBatch2("listings.0.tokenId")}
+          />
           <h4 className={styles.formSectionTitle}>When </h4>
 
           {/* Input field for auction start date */}
@@ -527,7 +1756,7 @@ export default function SaleInfo({ nft }: Props) {
           <input
             className={styles.input}
             type="datetime-local"
-            {...registerBatch2("startDate")}
+            {...registerBatch2("listings.0.startDate")}
             aria-label="Auction Start Date"
           />
 
@@ -536,7 +1765,7 @@ export default function SaleInfo({ nft }: Props) {
           <input
             className={styles.input}
             type="datetime-local"
-            {...registerBatch2("endDate")}
+            {...registerBatch2("listings.0.endDate")}
             aria-label="Auction End Date"
           />
           <h4 className={styles.formSectionTitle}>Price </h4>
@@ -547,10 +1776,18 @@ export default function SaleInfo({ nft }: Props) {
             className={styles.input}
             type="number"
             step={0.000001}
-            {...registerBatch2("price")}
+            {...registerBatch2("listings.0.price")}
           />
 
 <h5 className={styles.formSectionTitle}>listing 2</h5>
+          {/* Input field for token Id to sell */}
+          <legend className={styles.legend}> Token ID </legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={1.000000}
+            {...registerBatch2("listings.1.tokenId")}
+          />
           <h4 className={styles.formSectionTitle}>When </h4>
 
           {/* Input field for auction start date */}
@@ -558,7 +1795,7 @@ export default function SaleInfo({ nft }: Props) {
           <input
             className={styles.input}
             type="datetime-local"
-            {...registerBatch2("startDate")}
+            {...registerBatch2("listings.1.startDate")}
             aria-label="Auction Start Date"
           />
 
@@ -567,7 +1804,7 @@ export default function SaleInfo({ nft }: Props) {
           <input
             className={styles.input}
             type="datetime-local"
-            {...registerBatch2("endDate")}
+            {...registerBatch2("listings.1.endDate")}
             aria-label="Auction End Date"
           />
           <h4 className={styles.formSectionTitle}>Price </h4>
@@ -578,13 +1815,13 @@ export default function SaleInfo({ nft }: Props) {
             className={styles.input}
             type="number"
             step={0.000001}
-            {...registerBatch2("price")}
+            {...registerBatch2("listings.1.price")}
           />
 
           <Web3Button
-            contractAddress={ETH_MARKETPLACE_ADDRESS}
+            contractAddress={POLY_MARKETPLACE_ADDRESS}
             action={async () => {
-              await handleSubmitBatch2(handleSubmissionDirect)();
+              await handleSubmitBatch2(handleSubmissionBatch2)();
             }}
             onError={(error) => {
               toast(`Listed Failed! Reason: ${error.cause}`, {
@@ -600,11 +1837,2333 @@ export default function SaleInfo({ nft }: Props) {
                 position: "bottom-center",
               });
               router.push(
-                `/ethdrop/`
+                `/ethdrop/paperhands`
               );
             }}
           >
             list 2
+          </Web3Button>
+          </div>
+        {/* Batch listing 3 */}
+        <div
+          className={`${
+            dumpTab === "3"
+              ? styles.activeTabContent
+              : profileStyles.tabContent
+          }`}
+          style={{ flexDirection: "column" }}
+        >
+
+          <h5 className={styles.formSectionTitle}>listing 1</h5>
+          {/* Input field for token Id to sell */}
+          <legend className={styles.legend}> Token ID </legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={1.000000}
+            {...registerBatch3("listings.0.tokenId")}
+          />
+          <h4 className={styles.formSectionTitle}>When </h4>
+
+          {/* Input field for auction start date */}
+          <legend className={styles.legend}> Listing Starts on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch3("listings.0.startDate")}
+            aria-label="Auction Start Date"
+          />
+
+          {/* Input field for auction end date */}
+          <legend className={styles.legend}> Listing Ends on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch3("listings.0.endDate")}
+            aria-label="Auction End Date"
+          />
+          <h4 className={styles.formSectionTitle}>Price </h4>
+
+          {/* Input field for buyout price */}
+          <legend className={styles.legend}> Price per token</legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={0.000001}
+            {...registerBatch3("listings.0.price")}
+          />
+
+<h5 className={styles.formSectionTitle}>listing 2</h5>
+          {/* Input field for token Id to sell */}
+          <legend className={styles.legend}> Token ID </legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={1.000000}
+            {...registerBatch3("listings.1.tokenId")}
+          />
+          <h4 className={styles.formSectionTitle}>When </h4>
+
+          {/* Input field for auction start date */}
+          <legend className={styles.legend}> Listing Starts on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch3("listings.1.startDate")}
+            aria-label="Auction Start Date"
+          />
+
+          {/* Input field for auction end date */}
+          <legend className={styles.legend}> Listing Ends on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch3("listings.1.endDate")}
+            aria-label="Auction End Date"
+          />
+          <h4 className={styles.formSectionTitle}>Price </h4>
+
+          {/* Input field for buyout price */}
+          <legend className={styles.legend}> Price per token</legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={0.000001}
+            {...registerBatch3("listings.1.price")}
+          />
+
+<h5 className={styles.formSectionTitle}>listing 3</h5>
+          {/* Input field for token Id to sell */}
+          <legend className={styles.legend}> Token ID </legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={1.000000}
+            {...registerBatch3("listings.2.tokenId")}
+          />
+          <h4 className={styles.formSectionTitle}>When </h4>
+
+          {/* Input field for auction start date */}
+          <legend className={styles.legend}> Listing Starts on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch3("listings.2.startDate")}
+            aria-label="Auction Start Date"
+          />
+
+          {/* Input field for auction end date */}
+          <legend className={styles.legend}> Listing Ends on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch3("listings.2.endDate")}
+            aria-label="Auction End Date"
+          />
+          <h4 className={styles.formSectionTitle}>Price </h4>
+
+          {/* Input field for buyout price */}
+          <legend className={styles.legend}> Price per token</legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={0.000001}
+            {...registerBatch3("listings.2.price")}
+          />
+
+          <Web3Button
+            contractAddress={POLY_MARKETPLACE_ADDRESS}
+            action={async () => {
+              await handleSubmitBatch3(handleSubmissionBatch3)();
+            }}
+            onError={(error) => {
+              toast(`Listed Failed! Reason: ${error.cause}`, {
+                icon: "❌",
+                style: toastStyle,
+                position: "bottom-center",
+              });
+            }}
+            onSuccess={(txResult) => {
+              toast("Listed Successfully!", {
+                icon: "🥳",
+                style: toastStyle,
+                position: "bottom-center",
+              });
+              router.push(
+                `/ethdrop/paperhands`
+              );
+            }}
+          >
+            list 3
+          </Web3Button>
+          </div>
+        {/* Batch listing 4 */}
+        <div
+          className={`${
+            dumpTab === "4"
+              ? styles.activeTabContent
+              : profileStyles.tabContent
+          }`}
+          style={{ flexDirection: "column" }}
+        >
+
+          <h5 className={styles.formSectionTitle}>listing 1</h5>
+          {/* Input field for token Id to sell */}
+          <legend className={styles.legend}> Token ID </legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={1.000000}
+            {...registerBatch4("listings.0.tokenId")}
+          />
+          <h4 className={styles.formSectionTitle}>When </h4>
+
+          {/* Input field for auction start date */}
+          <legend className={styles.legend}> Listing Starts on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch4("listings.0.startDate")}
+            aria-label="Auction Start Date"
+          />
+
+          {/* Input field for auction end date */}
+          <legend className={styles.legend}> Listing Ends on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch4("listings.0.endDate")}
+            aria-label="Auction End Date"
+          />
+          <h4 className={styles.formSectionTitle}>Price </h4>
+
+          {/* Input field for buyout price */}
+          <legend className={styles.legend}> Price per token</legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={0.000001}
+            {...registerBatch4("listings.0.price")}
+          />
+
+<h5 className={styles.formSectionTitle}>listing 2</h5>
+          {/* Input field for token Id to sell */}
+          <legend className={styles.legend}> Token ID </legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={1.000000}
+            {...registerBatch4("listings.1.tokenId")}
+          />
+          <h4 className={styles.formSectionTitle}>When </h4>
+
+          {/* Input field for auction start date */}
+          <legend className={styles.legend}> Listing Starts on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch4("listings.1.startDate")}
+            aria-label="Auction Start Date"
+          />
+
+          {/* Input field for auction end date */}
+          <legend className={styles.legend}> Listing Ends on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch4("listings.1.endDate")}
+            aria-label="Auction End Date"
+          />
+          <h4 className={styles.formSectionTitle}>Price </h4>
+
+          {/* Input field for buyout price */}
+          <legend className={styles.legend}> Price per token</legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={0.000001}
+            {...registerBatch4("listings.1.price")}
+          />
+
+<h5 className={styles.formSectionTitle}>listing 3</h5>
+          {/* Input field for token Id to sell */}
+          <legend className={styles.legend}> Token ID </legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={1.000000}
+            {...registerBatch4("listings.2.tokenId")}
+          />
+          <h4 className={styles.formSectionTitle}>When </h4>
+
+          {/* Input field for auction start date */}
+          <legend className={styles.legend}> Listing Starts on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch4("listings.2.startDate")}
+            aria-label="Auction Start Date"
+          />
+
+          {/* Input field for auction end date */}
+          <legend className={styles.legend}> Listing Ends on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch4("listings.2.endDate")}
+            aria-label="Auction End Date"
+          />
+          <h4 className={styles.formSectionTitle}>Price </h4>
+
+          {/* Input field for buyout price */}
+          <legend className={styles.legend}> Price per token</legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={0.000001}
+            {...registerBatch4("listings.2.price")}
+          />
+
+<h5 className={styles.formSectionTitle}>listing 4</h5>
+          {/* Input field for token Id to sell */}
+          <legend className={styles.legend}> Token ID </legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={1.000000}
+            {...registerBatch4("listings.3.tokenId")}
+          />
+          <h4 className={styles.formSectionTitle}>When </h4>
+
+          {/* Input field for auction start date */}
+          <legend className={styles.legend}> Listing Starts on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch4("listings.3.startDate")}
+            aria-label="Auction Start Date"
+          />
+
+          {/* Input field for auction end date */}
+          <legend className={styles.legend}> Listing Ends on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch4("listings.3.endDate")}
+            aria-label="Auction End Date"
+          />
+          <h4 className={styles.formSectionTitle}>Price </h4>
+
+          {/* Input field for buyout price */}
+          <legend className={styles.legend}> Price per token</legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={0.000001}
+            {...registerBatch4("listings.3.price")}
+          />
+
+          <Web3Button
+            contractAddress={POLY_MARKETPLACE_ADDRESS}
+            action={async () => {
+              await handleSubmitBatch4(handleSubmissionBatch4)();
+            }}
+            onError={(error) => {
+              toast(`Listed Failed! Reason: ${error.cause}`, {
+                icon: "❌",
+                style: toastStyle,
+                position: "bottom-center",
+              });
+            }}
+            onSuccess={(txResult) => {
+              toast("Listed Successfully!", {
+                icon: "🥳",
+                style: toastStyle,
+                position: "bottom-center",
+              });
+              router.push(
+                `/ethdrop/paperhands`
+              );
+            }}
+          >
+            list 4
+          </Web3Button>
+          </div>
+
+        {/* Batch listing 5 */}
+        <div
+          className={`${
+            dumpTab === "5"
+              ? styles.activeTabContent
+              : profileStyles.tabContent
+          }`}
+          style={{ flexDirection: "column" }}
+        >
+
+          <h5 className={styles.formSectionTitle}>listing 1</h5>
+          {/* Input field for token Id to sell */}
+          <legend className={styles.legend}> Token ID </legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={1.000000}
+            {...registerBatch5("listings.0.tokenId")}
+          />
+          <h4 className={styles.formSectionTitle}>When </h4>
+
+          {/* Input field for auction start date */}
+          <legend className={styles.legend}> Listing Starts on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch5("listings.0.startDate")}
+            aria-label="Auction Start Date"
+          />
+
+          {/* Input field for auction end date */}
+          <legend className={styles.legend}> Listing Ends on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch5("listings.0.endDate")}
+            aria-label="Auction End Date"
+          />
+          <h4 className={styles.formSectionTitle}>Price </h4>
+
+          {/* Input field for buyout price */}
+          <legend className={styles.legend}> Price per token</legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={0.000001}
+            {...registerBatch5("listings.0.price")}
+          />
+
+<h5 className={styles.formSectionTitle}>listing 2</h5>
+          {/* Input field for token Id to sell */}
+          <legend className={styles.legend}> Token ID </legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={1.000000}
+            {...registerBatch5("listings.1.tokenId")}
+          />
+          <h4 className={styles.formSectionTitle}>When </h4>
+
+          {/* Input field for auction start date */}
+          <legend className={styles.legend}> Listing Starts on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch5("listings.1.startDate")}
+            aria-label="Auction Start Date"
+          />
+
+          {/* Input field for auction end date */}
+          <legend className={styles.legend}> Listing Ends on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch5("listings.1.endDate")}
+            aria-label="Auction End Date"
+          />
+          <h4 className={styles.formSectionTitle}>Price </h4>
+
+          {/* Input field for buyout price */}
+          <legend className={styles.legend}> Price per token</legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={0.000001}
+            {...registerBatch5("listings.1.price")}
+          />
+
+<h5 className={styles.formSectionTitle}>listing 3</h5>
+          {/* Input field for token Id to sell */}
+          <legend className={styles.legend}> Token ID </legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={1.000000}
+            {...registerBatch5("listings.2.tokenId")}
+          />
+          <h4 className={styles.formSectionTitle}>When </h4>
+
+          {/* Input field for auction start date */}
+          <legend className={styles.legend}> Listing Starts on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch5("listings.2.startDate")}
+            aria-label="Auction Start Date"
+          />
+
+          {/* Input field for auction end date */}
+          <legend className={styles.legend}> Listing Ends on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch5("listings.2.endDate")}
+            aria-label="Auction End Date"
+          />
+          <h4 className={styles.formSectionTitle}>Price </h4>
+
+          {/* Input field for buyout price */}
+          <legend className={styles.legend}> Price per token</legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={0.000001}
+            {...registerBatch5("listings.2.price")}
+          />
+
+<h5 className={styles.formSectionTitle}>listing 4</h5>
+          {/* Input field for token Id to sell */}
+          <legend className={styles.legend}> Token ID </legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={1.000000}
+            {...registerBatch5("listings.3.tokenId")}
+          />
+          <h4 className={styles.formSectionTitle}>When </h4>
+
+          {/* Input field for auction start date */}
+          <legend className={styles.legend}> Listing Starts on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch5("listings.3.startDate")}
+            aria-label="Auction Start Date"
+          />
+
+          {/* Input field for auction end date */}
+          <legend className={styles.legend}> Listing Ends on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch5("listings.3.endDate")}
+            aria-label="Auction End Date"
+          />
+          <h4 className={styles.formSectionTitle}>Price </h4>
+
+          {/* Input field for buyout price */}
+          <legend className={styles.legend}> Price per token</legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={0.000001}
+            {...registerBatch5("listings.3.price")}
+          />
+
+<h5 className={styles.formSectionTitle}>listing 5</h5>
+          {/* Input field for token Id to sell */}
+          <legend className={styles.legend}> Token ID </legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={1.000000}
+            {...registerBatch5("listings.4.tokenId")}
+          />
+          <h4 className={styles.formSectionTitle}>When </h4>
+
+          {/* Input field for auction start date */}
+          <legend className={styles.legend}> Listing Starts on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch5("listings.4.startDate")}
+            aria-label="Auction Start Date"
+          />
+
+          {/* Input field for auction end date */}
+          <legend className={styles.legend}> Listing Ends on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch5("listings.4.endDate")}
+            aria-label="Auction End Date"
+          />
+          <h4 className={styles.formSectionTitle}>Price </h4>
+
+          {/* Input field for buyout price */}
+          <legend className={styles.legend}> Price per token</legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={0.000001}
+            {...registerBatch5("listings.4.price")}
+          />
+
+          <Web3Button
+            contractAddress={POLY_MARKETPLACE_ADDRESS}
+            action={async () => {
+              await handleSubmitBatch5(handleSubmissionBatch5)();
+            }}
+            onError={(error) => {
+              toast(`Listed Failed! Reason: ${error.cause}`, {
+                icon: "❌",
+                style: toastStyle,
+                position: "bottom-center",
+              });
+            }}
+            onSuccess={(txResult) => {
+              toast("Listed Successfully!", {
+                icon: "🥳",
+                style: toastStyle,
+                position: "bottom-center",
+              });
+              router.push(
+                `/ethdrop/paperhands`
+              );
+            }}
+          >
+            list 5
+          </Web3Button>
+          </div>
+
+        {/* Batch listing 6 */}
+        <div
+          className={`${
+            dumpTab === "6"
+              ? styles.activeTabContent
+              : profileStyles.tabContent
+          }`}
+          style={{ flexDirection: "column" }}
+        >
+
+          <h5 className={styles.formSectionTitle}>listing 1</h5>
+          {/* Input field for token Id to sell */}
+          <legend className={styles.legend}> Token ID </legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={1.000000}
+            {...registerBatch6("listings.0.tokenId")}
+          />
+          <h4 className={styles.formSectionTitle}>When </h4>
+
+          {/* Input field for auction start date */}
+          <legend className={styles.legend}> Listing Starts on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch6("listings.0.startDate")}
+            aria-label="Auction Start Date"
+          />
+
+          {/* Input field for auction end date */}
+          <legend className={styles.legend}> Listing Ends on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch6("listings.0.endDate")}
+            aria-label="Auction End Date"
+          />
+          <h4 className={styles.formSectionTitle}>Price </h4>
+
+          {/* Input field for buyout price */}
+          <legend className={styles.legend}> Price per token</legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={0.000001}
+            {...registerBatch6("listings.0.price")}
+          />
+
+<h5 className={styles.formSectionTitle}>listing 2</h5>
+          {/* Input field for token Id to sell */}
+          <legend className={styles.legend}> Token ID </legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={1.000000}
+            {...registerBatch6("listings.1.tokenId")}
+          />
+          <h4 className={styles.formSectionTitle}>When </h4>
+
+          {/* Input field for auction start date */}
+          <legend className={styles.legend}> Listing Starts on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch6("listings.1.startDate")}
+            aria-label="Auction Start Date"
+          />
+
+          {/* Input field for auction end date */}
+          <legend className={styles.legend}> Listing Ends on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch6("listings.1.endDate")}
+            aria-label="Auction End Date"
+          />
+          <h4 className={styles.formSectionTitle}>Price </h4>
+
+          {/* Input field for buyout price */}
+          <legend className={styles.legend}> Price per token</legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={0.000001}
+            {...registerBatch6("listings.1.price")}
+          />
+
+<h5 className={styles.formSectionTitle}>listing 3</h5>
+          {/* Input field for token Id to sell */}
+          <legend className={styles.legend}> Token ID </legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={1.000000}
+            {...registerBatch6("listings.2.tokenId")}
+          />
+          <h4 className={styles.formSectionTitle}>When </h4>
+
+          {/* Input field for auction start date */}
+          <legend className={styles.legend}> Listing Starts on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch6("listings.2.startDate")}
+            aria-label="Auction Start Date"
+          />
+
+          {/* Input field for auction end date */}
+          <legend className={styles.legend}> Listing Ends on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch6("listings.2.endDate")}
+            aria-label="Auction End Date"
+          />
+          <h4 className={styles.formSectionTitle}>Price </h4>
+
+          {/* Input field for buyout price */}
+          <legend className={styles.legend}> Price per token</legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={0.000001}
+            {...registerBatch6("listings.2.price")}
+          />
+
+<h5 className={styles.formSectionTitle}>listing 4</h5>
+          {/* Input field for token Id to sell */}
+          <legend className={styles.legend}> Token ID </legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={1.000000}
+            {...registerBatch6("listings.3.tokenId")}
+          />
+          <h4 className={styles.formSectionTitle}>When </h4>
+
+          {/* Input field for auction start date */}
+          <legend className={styles.legend}> Listing Starts on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch6("listings.3.startDate")}
+            aria-label="Auction Start Date"
+          />
+
+          {/* Input field for auction end date */}
+          <legend className={styles.legend}> Listing Ends on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch6("listings.3.endDate")}
+            aria-label="Auction End Date"
+          />
+          <h4 className={styles.formSectionTitle}>Price </h4>
+
+          {/* Input field for buyout price */}
+          <legend className={styles.legend}> Price per token</legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={0.000001}
+            {...registerBatch6("listings.3.price")}
+          />
+
+<h5 className={styles.formSectionTitle}>listing 5</h5>
+          {/* Input field for token Id to sell */}
+          <legend className={styles.legend}> Token ID </legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={1.000000}
+            {...registerBatch6("listings.4.tokenId")}
+          />
+          <h4 className={styles.formSectionTitle}>When </h4>
+
+          {/* Input field for auction start date */}
+          <legend className={styles.legend}> Listing Starts on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch6("listings.4.startDate")}
+            aria-label="Auction Start Date"
+          />
+
+          {/* Input field for auction end date */}
+          <legend className={styles.legend}> Listing Ends on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch6("listings.4.endDate")}
+            aria-label="Auction End Date"
+          />
+          <h4 className={styles.formSectionTitle}>Price </h4>
+
+          {/* Input field for buyout price */}
+          <legend className={styles.legend}> Price per token</legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={0.000001}
+            {...registerBatch6("listings.4.price")}
+          />
+
+<h5 className={styles.formSectionTitle}>listing 6</h5>
+          {/* Input field for token Id to sell */}
+          <legend className={styles.legend}> Token ID </legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={1.000000}
+            {...registerBatch6("listings.5.tokenId")}
+          />
+          <h4 className={styles.formSectionTitle}>When </h4>
+
+          {/* Input field for auction start date */}
+          <legend className={styles.legend}> Listing Starts on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch6("listings.5.startDate")}
+            aria-label="Auction Start Date"
+          />
+
+          {/* Input field for auction end date */}
+          <legend className={styles.legend}> Listing Ends on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch6("listings.5.endDate")}
+            aria-label="Auction End Date"
+          />
+          <h4 className={styles.formSectionTitle}>Price </h4>
+
+          {/* Input field for buyout price */}
+          <legend className={styles.legend}> Price per token</legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={0.000001}
+            {...registerBatch6("listings.5.price")}
+          />
+
+          <Web3Button
+            contractAddress={POLY_MARKETPLACE_ADDRESS}
+            action={async () => {
+              await handleSubmitBatch6(handleSubmissionBatch6)();
+            }}
+            onError={(error) => {
+              toast(`Listed Failed! Reason: ${error.cause}`, {
+                icon: "❌",
+                style: toastStyle,
+                position: "bottom-center",
+              });
+            }}
+            onSuccess={(txResult) => {
+              toast("Listed Successfully!", {
+                icon: "🥳",
+                style: toastStyle,
+                position: "bottom-center",
+              });
+              router.push(
+                `/ethdrop/paperhands`
+              );
+            }}
+          >
+            list 6
+          </Web3Button>
+          </div>
+
+        {/* Batch listing 7 */}
+        <div
+          className={`${
+            dumpTab === "7"
+              ? styles.activeTabContent
+              : profileStyles.tabContent
+          }`}
+          style={{ flexDirection: "column" }}
+        >
+
+          <h5 className={styles.formSectionTitle}>listing 1</h5>
+          {/* Input field for token Id to sell */}
+          <legend className={styles.legend}> Token ID </legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={1.000000}
+            {...registerBatch7("listings.0.tokenId")}
+          />
+          <h4 className={styles.formSectionTitle}>When </h4>
+
+          {/* Input field for auction start date */}
+          <legend className={styles.legend}> Listing Starts on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch7("listings.0.startDate")}
+            aria-label="Auction Start Date"
+          />
+
+          {/* Input field for auction end date */}
+          <legend className={styles.legend}> Listing Ends on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch7("listings.0.endDate")}
+            aria-label="Auction End Date"
+          />
+          <h4 className={styles.formSectionTitle}>Price </h4>
+
+          {/* Input field for buyout price */}
+          <legend className={styles.legend}> Price per token</legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={0.000001}
+            {...registerBatch7("listings.0.price")}
+          />
+
+<h5 className={styles.formSectionTitle}>listing 2</h5>
+          {/* Input field for token Id to sell */}
+          <legend className={styles.legend}> Token ID </legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={1.000000}
+            {...registerBatch7("listings.1.tokenId")}
+          />
+          <h4 className={styles.formSectionTitle}>When </h4>
+
+          {/* Input field for auction start date */}
+          <legend className={styles.legend}> Listing Starts on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch7("listings.1.startDate")}
+            aria-label="Auction Start Date"
+          />
+
+          {/* Input field for auction end date */}
+          <legend className={styles.legend}> Listing Ends on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch7("listings.1.endDate")}
+            aria-label="Auction End Date"
+          />
+          <h4 className={styles.formSectionTitle}>Price </h4>
+
+          {/* Input field for buyout price */}
+          <legend className={styles.legend}> Price per token</legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={0.000001}
+            {...registerBatch7("listings.1.price")}
+          />
+
+<h5 className={styles.formSectionTitle}>listing 3</h5>
+          {/* Input field for token Id to sell */}
+          <legend className={styles.legend}> Token ID </legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={1.000000}
+            {...registerBatch7("listings.2.tokenId")}
+          />
+          <h4 className={styles.formSectionTitle}>When </h4>
+
+          {/* Input field for auction start date */}
+          <legend className={styles.legend}> Listing Starts on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch7("listings.2.startDate")}
+            aria-label="Auction Start Date"
+          />
+
+          {/* Input field for auction end date */}
+          <legend className={styles.legend}> Listing Ends on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch7("listings.2.endDate")}
+            aria-label="Auction End Date"
+          />
+          <h4 className={styles.formSectionTitle}>Price </h4>
+
+          {/* Input field for buyout price */}
+          <legend className={styles.legend}> Price per token</legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={0.000001}
+            {...registerBatch7("listings.2.price")}
+          />
+
+<h5 className={styles.formSectionTitle}>listing 4</h5>
+          {/* Input field for token Id to sell */}
+          <legend className={styles.legend}> Token ID </legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={1.000000}
+            {...registerBatch7("listings.3.tokenId")}
+          />
+          <h4 className={styles.formSectionTitle}>When </h4>
+
+          {/* Input field for auction start date */}
+          <legend className={styles.legend}> Listing Starts on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch7("listings.3.startDate")}
+            aria-label="Auction Start Date"
+          />
+
+          {/* Input field for auction end date */}
+          <legend className={styles.legend}> Listing Ends on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch7("listings.3.endDate")}
+            aria-label="Auction End Date"
+          />
+          <h4 className={styles.formSectionTitle}>Price </h4>
+
+          {/* Input field for buyout price */}
+          <legend className={styles.legend}> Price per token</legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={0.000001}
+            {...registerBatch7("listings.3.price")}
+          />
+
+<h5 className={styles.formSectionTitle}>listing 5</h5>
+          {/* Input field for token Id to sell */}
+          <legend className={styles.legend}> Token ID </legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={1.000000}
+            {...registerBatch7("listings.4.tokenId")}
+          />
+          <h4 className={styles.formSectionTitle}>When </h4>
+
+          {/* Input field for auction start date */}
+          <legend className={styles.legend}> Listing Starts on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch7("listings.4.startDate")}
+            aria-label="Auction Start Date"
+          />
+
+          {/* Input field for auction end date */}
+          <legend className={styles.legend}> Listing Ends on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch7("listings.4.endDate")}
+            aria-label="Auction End Date"
+          />
+          <h4 className={styles.formSectionTitle}>Price </h4>
+
+          {/* Input field for buyout price */}
+          <legend className={styles.legend}> Price per token</legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={0.000001}
+            {...registerBatch7("listings.4.price")}
+          />
+
+<h5 className={styles.formSectionTitle}>listing 6</h5>
+          {/* Input field for token Id to sell */}
+          <legend className={styles.legend}> Token ID </legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={1.000000}
+            {...registerBatch7("listings.5.tokenId")}
+          />
+          <h4 className={styles.formSectionTitle}>When </h4>
+
+          {/* Input field for auction start date */}
+          <legend className={styles.legend}> Listing Starts on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch7("listings.5.startDate")}
+            aria-label="Auction Start Date"
+          />
+
+          {/* Input field for auction end date */}
+          <legend className={styles.legend}> Listing Ends on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch7("listings.5.endDate")}
+            aria-label="Auction End Date"
+          />
+          <h4 className={styles.formSectionTitle}>Price </h4>
+
+          {/* Input field for buyout price */}
+          <legend className={styles.legend}> Price per token</legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={0.000001}
+            {...registerBatch7("listings.5.price")}
+          />
+
+<h5 className={styles.formSectionTitle}>listing 7</h5>
+          {/* Input field for token Id to sell */}
+          <legend className={styles.legend}> Token ID </legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={1.000000}
+            {...registerBatch7("listings.6.tokenId")}
+          />
+          <h4 className={styles.formSectionTitle}>When </h4>
+
+          {/* Input field for auction start date */}
+          <legend className={styles.legend}> Listing Starts on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch7("listings.6.startDate")}
+            aria-label="Auction Start Date"
+          />
+
+          {/* Input field for auction end date */}
+          <legend className={styles.legend}> Listing Ends on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch7("listings.6.endDate")}
+            aria-label="Auction End Date"
+          />
+          <h4 className={styles.formSectionTitle}>Price </h4>
+
+          {/* Input field for buyout price */}
+          <legend className={styles.legend}> Price per token</legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={0.000001}
+            {...registerBatch7("listings.6.price")}
+          />
+
+          <Web3Button
+            contractAddress={POLY_MARKETPLACE_ADDRESS}
+            action={async () => {
+              await handleSubmitBatch7(handleSubmissionBatch7)();
+            }}
+            onError={(error) => {
+              toast(`Listed Failed! Reason: ${error.cause}`, {
+                icon: "❌",
+                style: toastStyle,
+                position: "bottom-center",
+              });
+            }}
+            onSuccess={(txResult) => {
+              toast("Listed Successfully!", {
+                icon: "🥳",
+                style: toastStyle,
+                position: "bottom-center",
+              });
+              router.push(
+                `/ethdrop/paperhands`
+              );
+            }}
+          >
+            list 7
+          </Web3Button>
+          </div>
+
+        {/* Batch listing 8 */}
+        <div
+          className={`${
+            dumpTab === "8"
+              ? styles.activeTabContent
+              : profileStyles.tabContent
+          }`}
+          style={{ flexDirection: "column" }}
+        >
+
+          <h5 className={styles.formSectionTitle}>listing 1</h5>
+          {/* Input field for token Id to sell */}
+          <legend className={styles.legend}> Token ID </legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={1.000000}
+            {...registerBatch8("listings.0.tokenId")}
+          />
+          <h4 className={styles.formSectionTitle}>When </h4>
+
+          {/* Input field for auction start date */}
+          <legend className={styles.legend}> Listing Starts on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch8("listings.0.startDate")}
+            aria-label="Auction Start Date"
+          />
+
+          {/* Input field for auction end date */}
+          <legend className={styles.legend}> Listing Ends on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch8("listings.0.endDate")}
+            aria-label="Auction End Date"
+          />
+          <h4 className={styles.formSectionTitle}>Price </h4>
+
+          {/* Input field for buyout price */}
+          <legend className={styles.legend}> Price per token</legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={0.000001}
+            {...registerBatch8("listings.0.price")}
+          />
+
+<h5 className={styles.formSectionTitle}>listing 2</h5>
+          {/* Input field for token Id to sell */}
+          <legend className={styles.legend}> Token ID </legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={1.000000}
+            {...registerBatch8("listings.1.tokenId")}
+          />
+          <h4 className={styles.formSectionTitle}>When </h4>
+
+          {/* Input field for auction start date */}
+          <legend className={styles.legend}> Listing Starts on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch8("listings.1.startDate")}
+            aria-label="Auction Start Date"
+          />
+
+          {/* Input field for auction end date */}
+          <legend className={styles.legend}> Listing Ends on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch8("listings.1.endDate")}
+            aria-label="Auction End Date"
+          />
+          <h4 className={styles.formSectionTitle}>Price </h4>
+
+          {/* Input field for buyout price */}
+          <legend className={styles.legend}> Price per token</legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={0.000001}
+            {...registerBatch8("listings.1.price")}
+          />
+
+<h5 className={styles.formSectionTitle}>listing 3</h5>
+          {/* Input field for token Id to sell */}
+          <legend className={styles.legend}> Token ID </legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={1.000000}
+            {...registerBatch8("listings.2.tokenId")}
+          />
+          <h4 className={styles.formSectionTitle}>When </h4>
+
+          {/* Input field for auction start date */}
+          <legend className={styles.legend}> Listing Starts on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch8("listings.2.startDate")}
+            aria-label="Auction Start Date"
+          />
+
+          {/* Input field for auction end date */}
+          <legend className={styles.legend}> Listing Ends on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch8("listings.2.endDate")}
+            aria-label="Auction End Date"
+          />
+          <h4 className={styles.formSectionTitle}>Price </h4>
+
+          {/* Input field for buyout price */}
+          <legend className={styles.legend}> Price per token</legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={0.000001}
+            {...registerBatch8("listings.2.price")}
+          />
+
+<h5 className={styles.formSectionTitle}>listing 4</h5>
+          {/* Input field for token Id to sell */}
+          <legend className={styles.legend}> Token ID </legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={1.000000}
+            {...registerBatch8("listings.3.tokenId")}
+          />
+          <h4 className={styles.formSectionTitle}>When </h4>
+
+          {/* Input field for auction start date */}
+          <legend className={styles.legend}> Listing Starts on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch8("listings.3.startDate")}
+            aria-label="Auction Start Date"
+          />
+
+          {/* Input field for auction end date */}
+          <legend className={styles.legend}> Listing Ends on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch8("listings.3.endDate")}
+            aria-label="Auction End Date"
+          />
+          <h4 className={styles.formSectionTitle}>Price </h4>
+
+          {/* Input field for buyout price */}
+          <legend className={styles.legend}> Price per token</legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={0.000001}
+            {...registerBatch8("listings.3.price")}
+          />
+
+<h5 className={styles.formSectionTitle}>listing 5</h5>
+          {/* Input field for token Id to sell */}
+          <legend className={styles.legend}> Token ID </legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={1.000000}
+            {...registerBatch8("listings.4.tokenId")}
+          />
+          <h4 className={styles.formSectionTitle}>When </h4>
+
+          {/* Input field for auction start date */}
+          <legend className={styles.legend}> Listing Starts on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch8("listings.4.startDate")}
+            aria-label="Auction Start Date"
+          />
+
+          {/* Input field for auction end date */}
+          <legend className={styles.legend}> Listing Ends on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch8("listings.4.endDate")}
+            aria-label="Auction End Date"
+          />
+          <h4 className={styles.formSectionTitle}>Price </h4>
+
+          {/* Input field for buyout price */}
+          <legend className={styles.legend}> Price per token</legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={0.000001}
+            {...registerBatch8("listings.4.price")}
+          />
+
+<h5 className={styles.formSectionTitle}>listing 6</h5>
+          {/* Input field for token Id to sell */}
+          <legend className={styles.legend}> Token ID </legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={1.000000}
+            {...registerBatch8("listings.5.tokenId")}
+          />
+          <h4 className={styles.formSectionTitle}>When </h4>
+
+          {/* Input field for auction start date */}
+          <legend className={styles.legend}> Listing Starts on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch8("listings.5.startDate")}
+            aria-label="Auction Start Date"
+          />
+
+          {/* Input field for auction end date */}
+          <legend className={styles.legend}> Listing Ends on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch8("listings.5.endDate")}
+            aria-label="Auction End Date"
+          />
+          <h4 className={styles.formSectionTitle}>Price </h4>
+
+          {/* Input field for buyout price */}
+          <legend className={styles.legend}> Price per token</legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={0.000001}
+            {...registerBatch8("listings.5.price")}
+          />
+
+<h5 className={styles.formSectionTitle}>listing 7</h5>
+          {/* Input field for token Id to sell */}
+          <legend className={styles.legend}> Token ID </legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={1.000000}
+            {...registerBatch8("listings.6.tokenId")}
+          />
+          <h4 className={styles.formSectionTitle}>When </h4>
+
+          {/* Input field for auction start date */}
+          <legend className={styles.legend}> Listing Starts on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch8("listings.6.startDate")}
+            aria-label="Auction Start Date"
+          />
+
+          {/* Input field for auction end date */}
+          <legend className={styles.legend}> Listing Ends on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch8("listings.6.endDate")}
+            aria-label="Auction End Date"
+          />
+          <h4 className={styles.formSectionTitle}>Price </h4>
+
+          {/* Input field for buyout price */}
+          <legend className={styles.legend}> Price per token</legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={0.000001}
+            {...registerBatch8("listings.6.price")}
+          />
+
+<h5 className={styles.formSectionTitle}>listing 8</h5>
+          {/* Input field for token Id to sell */}
+          <legend className={styles.legend}> Token ID </legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={1.000000}
+            {...registerBatch8("listings.7.tokenId")}
+          />
+          <h4 className={styles.formSectionTitle}>When </h4>
+
+          {/* Input field for auction start date */}
+          <legend className={styles.legend}> Listing Starts on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch8("listings.7.startDate")}
+            aria-label="Auction Start Date"
+          />
+
+          {/* Input field for auction end date */}
+          <legend className={styles.legend}> Listing Ends on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch8("listings.7.endDate")}
+            aria-label="Auction End Date"
+          />
+          <h4 className={styles.formSectionTitle}>Price </h4>
+
+          {/* Input field for buyout price */}
+          <legend className={styles.legend}> Price per token</legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={0.000001}
+            {...registerBatch8("listings.7.price")}
+          />
+
+          <Web3Button
+            contractAddress={POLY_MARKETPLACE_ADDRESS}
+            action={async () => {
+              await handleSubmitBatch8(handleSubmissionBatch8)();
+            }}
+            onError={(error) => {
+              toast(`Listed Failed! Reason: ${error.cause}`, {
+                icon: "❌",
+                style: toastStyle,
+                position: "bottom-center",
+              });
+            }}
+            onSuccess={(txResult) => {
+              toast("Listed Successfully!", {
+                icon: "🥳",
+                style: toastStyle,
+                position: "bottom-center",
+              });
+              router.push(
+                `/ethdrop/paperhands`
+              );
+            }}
+          >
+            list 8
+          </Web3Button>
+          </div>
+
+        {/* Batch listing 9 */}
+        <div
+          className={`${
+            dumpTab === "9"
+              ? styles.activeTabContent
+              : profileStyles.tabContent
+          }`}
+          style={{ flexDirection: "column" }}
+        >
+
+          <h5 className={styles.formSectionTitle}>listing 1</h5>
+          {/* Input field for token Id to sell */}
+          <legend className={styles.legend}> Token ID </legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={1.000000}
+            {...registerBatch9("listings.0.tokenId")}
+          />
+          <h4 className={styles.formSectionTitle}>When </h4>
+
+          {/* Input field for auction start date */}
+          <legend className={styles.legend}> Listing Starts on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch9("listings.0.startDate")}
+            aria-label="Auction Start Date"
+          />
+
+          {/* Input field for auction end date */}
+          <legend className={styles.legend}> Listing Ends on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch9("listings.0.endDate")}
+            aria-label="Auction End Date"
+          />
+          <h4 className={styles.formSectionTitle}>Price </h4>
+
+          {/* Input field for buyout price */}
+          <legend className={styles.legend}> Price per token</legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={0.000001}
+            {...registerBatch9("listings.0.price")}
+          />
+
+<h5 className={styles.formSectionTitle}>listing 2</h5>
+          {/* Input field for token Id to sell */}
+          <legend className={styles.legend}> Token ID </legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={1.000000}
+            {...registerBatch9("listings.1.tokenId")}
+          />
+          <h4 className={styles.formSectionTitle}>When </h4>
+
+          {/* Input field for auction start date */}
+          <legend className={styles.legend}> Listing Starts on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch9("listings.1.startDate")}
+            aria-label="Auction Start Date"
+          />
+
+          {/* Input field for auction end date */}
+          <legend className={styles.legend}> Listing Ends on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch9("listings.1.endDate")}
+            aria-label="Auction End Date"
+          />
+          <h4 className={styles.formSectionTitle}>Price </h4>
+
+          {/* Input field for buyout price */}
+          <legend className={styles.legend}> Price per token</legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={0.000001}
+            {...registerBatch9("listings.1.price")}
+          />
+
+<h5 className={styles.formSectionTitle}>listing 3</h5>
+          {/* Input field for token Id to sell */}
+          <legend className={styles.legend}> Token ID </legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={1.000000}
+            {...registerBatch9("listings.2.tokenId")}
+          />
+          <h4 className={styles.formSectionTitle}>When </h4>
+
+          {/* Input field for auction start date */}
+          <legend className={styles.legend}> Listing Starts on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch9("listings.2.startDate")}
+            aria-label="Auction Start Date"
+          />
+
+          {/* Input field for auction end date */}
+          <legend className={styles.legend}> Listing Ends on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch9("listings.2.endDate")}
+            aria-label="Auction End Date"
+          />
+          <h4 className={styles.formSectionTitle}>Price </h4>
+
+          {/* Input field for buyout price */}
+          <legend className={styles.legend}> Price per token</legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={0.000001}
+            {...registerBatch9("listings.2.price")}
+          />
+
+<h5 className={styles.formSectionTitle}>listing 4</h5>
+          {/* Input field for token Id to sell */}
+          <legend className={styles.legend}> Token ID </legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={1.000000}
+            {...registerBatch9("listings.3.tokenId")}
+          />
+          <h4 className={styles.formSectionTitle}>When </h4>
+
+          {/* Input field for auction start date */}
+          <legend className={styles.legend}> Listing Starts on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch9("listings.3.startDate")}
+            aria-label="Auction Start Date"
+          />
+
+          {/* Input field for auction end date */}
+          <legend className={styles.legend}> Listing Ends on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch9("listings.3.endDate")}
+            aria-label="Auction End Date"
+          />
+          <h4 className={styles.formSectionTitle}>Price </h4>
+
+          {/* Input field for buyout price */}
+          <legend className={styles.legend}> Price per token</legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={0.000001}
+            {...registerBatch9("listings.3.price")}
+          />
+
+<h5 className={styles.formSectionTitle}>listing 5</h5>
+          {/* Input field for token Id to sell */}
+          <legend className={styles.legend}> Token ID </legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={1.000000}
+            {...registerBatch9("listings.4.tokenId")}
+          />
+          <h4 className={styles.formSectionTitle}>When </h4>
+
+          {/* Input field for auction start date */}
+          <legend className={styles.legend}> Listing Starts on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch9("listings.4.startDate")}
+            aria-label="Auction Start Date"
+          />
+
+          {/* Input field for auction end date */}
+          <legend className={styles.legend}> Listing Ends on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch9("listings.4.endDate")}
+            aria-label="Auction End Date"
+          />
+          <h4 className={styles.formSectionTitle}>Price </h4>
+
+          {/* Input field for buyout price */}
+          <legend className={styles.legend}> Price per token</legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={0.000001}
+            {...registerBatch9("listings.4.price")}
+          />
+
+<h5 className={styles.formSectionTitle}>listing 6</h5>
+          {/* Input field for token Id to sell */}
+          <legend className={styles.legend}> Token ID </legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={1.000000}
+            {...registerBatch9("listings.5.tokenId")}
+          />
+          <h4 className={styles.formSectionTitle}>When </h4>
+
+          {/* Input field for auction start date */}
+          <legend className={styles.legend}> Listing Starts on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch9("listings.5.startDate")}
+            aria-label="Auction Start Date"
+          />
+
+          {/* Input field for auction end date */}
+          <legend className={styles.legend}> Listing Ends on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch9("listings.5.endDate")}
+            aria-label="Auction End Date"
+          />
+          <h4 className={styles.formSectionTitle}>Price </h4>
+
+          {/* Input field for buyout price */}
+          <legend className={styles.legend}> Price per token</legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={0.000001}
+            {...registerBatch9("listings.5.price")}
+          />
+
+<h5 className={styles.formSectionTitle}>listing 7</h5>
+          {/* Input field for token Id to sell */}
+          <legend className={styles.legend}> Token ID </legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={1.000000}
+            {...registerBatch9("listings.6.tokenId")}
+          />
+          <h4 className={styles.formSectionTitle}>When </h4>
+
+          {/* Input field for auction start date */}
+          <legend className={styles.legend}> Listing Starts on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch9("listings.6.startDate")}
+            aria-label="Auction Start Date"
+          />
+
+          {/* Input field for auction end date */}
+          <legend className={styles.legend}> Listing Ends on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch9("listings.6.endDate")}
+            aria-label="Auction End Date"
+          />
+          <h4 className={styles.formSectionTitle}>Price </h4>
+
+          {/* Input field for buyout price */}
+          <legend className={styles.legend}> Price per token</legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={0.000001}
+            {...registerBatch9("listings.6.price")}
+          />
+
+<h5 className={styles.formSectionTitle}>listing 8</h5>
+          {/* Input field for token Id to sell */}
+          <legend className={styles.legend}> Token ID </legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={1.000000}
+            {...registerBatch9("listings.7.tokenId")}
+          />
+          <h4 className={styles.formSectionTitle}>When </h4>
+
+          {/* Input field for auction start date */}
+          <legend className={styles.legend}> Listing Starts on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch9("listings.7.startDate")}
+            aria-label="Auction Start Date"
+          />
+
+          {/* Input field for auction end date */}
+          <legend className={styles.legend}> Listing Ends on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch9("listings.7.endDate")}
+            aria-label="Auction End Date"
+          />
+          <h4 className={styles.formSectionTitle}>Price </h4>
+
+          {/* Input field for buyout price */}
+          <legend className={styles.legend}> Price per token</legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={0.000001}
+            {...registerBatch9("listings.7.price")}
+          />
+
+<h5 className={styles.formSectionTitle}>listing 9</h5>
+          {/* Input field for token Id to sell */}
+          <legend className={styles.legend}> Token ID </legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={1.000000}
+            {...registerBatch9("listings.8.tokenId")}
+          />
+          <h4 className={styles.formSectionTitle}>When </h4>
+
+          {/* Input field for auction start date */}
+          <legend className={styles.legend}> Listing Starts on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch9("listings.8.startDate")}
+            aria-label="Auction Start Date"
+          />
+
+          {/* Input field for auction end date */}
+          <legend className={styles.legend}> Listing Ends on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch9("listings.8.endDate")}
+            aria-label="Auction End Date"
+          />
+          <h4 className={styles.formSectionTitle}>Price </h4>
+
+          {/* Input field for buyout price */}
+          <legend className={styles.legend}> Price per token</legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={0.000001}
+            {...registerBatch9("listings.8.price")}
+          />
+
+          <Web3Button
+            contractAddress={POLY_MARKETPLACE_ADDRESS}
+            action={async () => {
+              await handleSubmitBatch9(handleSubmissionBatch9)();
+            }}
+            onError={(error) => {
+              toast(`Listed Failed! Reason: ${error.cause}`, {
+                icon: "❌",
+                style: toastStyle,
+                position: "bottom-center",
+              });
+            }}
+            onSuccess={(txResult) => {
+              toast("Listed Successfully!", {
+                icon: "🥳",
+                style: toastStyle,
+                position: "bottom-center",
+              });
+              router.push(
+                `/ethdrop/paperhands`
+              );
+            }}
+          >
+            list 9
+          </Web3Button>
+          </div>
+
+        {/* Batch listing 10 */}
+        <div
+          className={`${
+            dumpTab === "10"
+              ? styles.activeTabContent
+              : profileStyles.tabContent
+          }`}
+          style={{ flexDirection: "column" }}
+        >
+
+          <h5 className={styles.formSectionTitle}>listing 1</h5>
+          {/* Input field for token Id to sell */}
+          <legend className={styles.legend}> Token ID </legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={1.000000}
+            {...registerBatch10("listings.0.tokenId")}
+          />
+          <h4 className={styles.formSectionTitle}>When </h4>
+
+          {/* Input field for auction start date */}
+          <legend className={styles.legend}> Listing Starts on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch10("listings.0.startDate")}
+            aria-label="Auction Start Date"
+          />
+
+          {/* Input field for auction end date */}
+          <legend className={styles.legend}> Listing Ends on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch10("listings.0.endDate")}
+            aria-label="Auction End Date"
+          />
+          <h4 className={styles.formSectionTitle}>Price </h4>
+
+          {/* Input field for buyout price */}
+          <legend className={styles.legend}> Price per token</legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={0.000001}
+            {...registerBatch10("listings.0.price")}
+          />
+
+<h5 className={styles.formSectionTitle}>listing 2</h5>
+          {/* Input field for token Id to sell */}
+          <legend className={styles.legend}> Token ID </legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={1.000000}
+            {...registerBatch10("listings.1.tokenId")}
+          />
+          <h4 className={styles.formSectionTitle}>When </h4>
+
+          {/* Input field for auction start date */}
+          <legend className={styles.legend}> Listing Starts on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch10("listings.1.startDate")}
+            aria-label="Auction Start Date"
+          />
+
+          {/* Input field for auction end date */}
+          <legend className={styles.legend}> Listing Ends on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch10("listings.1.endDate")}
+            aria-label="Auction End Date"
+          />
+          <h4 className={styles.formSectionTitle}>Price </h4>
+
+          {/* Input field for buyout price */}
+          <legend className={styles.legend}> Price per token</legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={0.000001}
+            {...registerBatch10("listings.1.price")}
+          />
+
+<h5 className={styles.formSectionTitle}>listing 3</h5>
+          {/* Input field for token Id to sell */}
+          <legend className={styles.legend}> Token ID </legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={1.000000}
+            {...registerBatch10("listings.2.tokenId")}
+          />
+          <h4 className={styles.formSectionTitle}>When </h4>
+
+          {/* Input field for auction start date */}
+          <legend className={styles.legend}> Listing Starts on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch10("listings.2.startDate")}
+            aria-label="Auction Start Date"
+          />
+
+          {/* Input field for auction end date */}
+          <legend className={styles.legend}> Listing Ends on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch10("listings.2.endDate")}
+            aria-label="Auction End Date"
+          />
+          <h4 className={styles.formSectionTitle}>Price </h4>
+
+          {/* Input field for buyout price */}
+          <legend className={styles.legend}> Price per token</legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={0.000001}
+            {...registerBatch10("listings.2.price")}
+          />
+
+<h5 className={styles.formSectionTitle}>listing 4</h5>
+          {/* Input field for token Id to sell */}
+          <legend className={styles.legend}> Token ID </legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={1.000000}
+            {...registerBatch10("listings.3.tokenId")}
+          />
+          <h4 className={styles.formSectionTitle}>When </h4>
+
+          {/* Input field for auction start date */}
+          <legend className={styles.legend}> Listing Starts on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch10("listings.3.startDate")}
+            aria-label="Auction Start Date"
+          />
+
+          {/* Input field for auction end date */}
+          <legend className={styles.legend}> Listing Ends on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch10("listings.3.endDate")}
+            aria-label="Auction End Date"
+          />
+          <h4 className={styles.formSectionTitle}>Price </h4>
+
+          {/* Input field for buyout price */}
+          <legend className={styles.legend}> Price per token</legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={0.000001}
+            {...registerBatch10("listings.3.price")}
+          />
+
+<h5 className={styles.formSectionTitle}>listing 5</h5>
+          {/* Input field for token Id to sell */}
+          <legend className={styles.legend}> Token ID </legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={1.000000}
+            {...registerBatch10("listings.4.tokenId")}
+          />
+          <h4 className={styles.formSectionTitle}>When </h4>
+
+          {/* Input field for auction start date */}
+          <legend className={styles.legend}> Listing Starts on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch10("listings.4.startDate")}
+            aria-label="Auction Start Date"
+          />
+
+          {/* Input field for auction end date */}
+          <legend className={styles.legend}> Listing Ends on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch10("listings.4.endDate")}
+            aria-label="Auction End Date"
+          />
+          <h4 className={styles.formSectionTitle}>Price </h4>
+
+          {/* Input field for buyout price */}
+          <legend className={styles.legend}> Price per token</legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={0.000001}
+            {...registerBatch10("listings.4.price")}
+          />
+
+<h5 className={styles.formSectionTitle}>listing 6</h5>
+          {/* Input field for token Id to sell */}
+          <legend className={styles.legend}> Token ID </legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={1.000000}
+            {...registerBatch10("listings.5.tokenId")}
+          />
+          <h4 className={styles.formSectionTitle}>When </h4>
+
+          {/* Input field for auction start date */}
+          <legend className={styles.legend}> Listing Starts on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch10("listings.5.startDate")}
+            aria-label="Auction Start Date"
+          />
+
+          {/* Input field for auction end date */}
+          <legend className={styles.legend}> Listing Ends on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch10("listings.5.endDate")}
+            aria-label="Auction End Date"
+          />
+          <h4 className={styles.formSectionTitle}>Price </h4>
+
+          {/* Input field for buyout price */}
+          <legend className={styles.legend}> Price per token</legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={0.000001}
+            {...registerBatch10("listings.5.price")}
+          />
+
+<h5 className={styles.formSectionTitle}>listing 7</h5>
+          {/* Input field for token Id to sell */}
+          <legend className={styles.legend}> Token ID </legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={1.000000}
+            {...registerBatch10("listings.6.tokenId")}
+          />
+          <h4 className={styles.formSectionTitle}>When </h4>
+
+          {/* Input field for auction start date */}
+          <legend className={styles.legend}> Listing Starts on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch10("listings.6.startDate")}
+            aria-label="Auction Start Date"
+          />
+
+          {/* Input field for auction end date */}
+          <legend className={styles.legend}> Listing Ends on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch10("listings.6.endDate")}
+            aria-label="Auction End Date"
+          />
+          <h4 className={styles.formSectionTitle}>Price </h4>
+
+          {/* Input field for buyout price */}
+          <legend className={styles.legend}> Price per token</legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={0.000001}
+            {...registerBatch10("listings.6.price")}
+          />
+
+<h5 className={styles.formSectionTitle}>listing 8</h5>
+          {/* Input field for token Id to sell */}
+          <legend className={styles.legend}> Token ID </legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={1.000000}
+            {...registerBatch10("listings.7.tokenId")}
+          />
+          <h4 className={styles.formSectionTitle}>When </h4>
+
+          {/* Input field for auction start date */}
+          <legend className={styles.legend}> Listing Starts on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch10("listings.7.startDate")}
+            aria-label="Auction Start Date"
+          />
+
+          {/* Input field for auction end date */}
+          <legend className={styles.legend}> Listing Ends on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch10("listings.7.endDate")}
+            aria-label="Auction End Date"
+          />
+          <h4 className={styles.formSectionTitle}>Price </h4>
+
+          {/* Input field for buyout price */}
+          <legend className={styles.legend}> Price per token</legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={0.000001}
+            {...registerBatch10("listings.7.price")}
+          />
+
+<h5 className={styles.formSectionTitle}>listing 9</h5>
+          {/* Input field for token Id to sell */}
+          <legend className={styles.legend}> Token ID </legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={1.000000}
+            {...registerBatch10("listings.8.tokenId")}
+          />
+          <h4 className={styles.formSectionTitle}>When </h4>
+
+          {/* Input field for auction start date */}
+          <legend className={styles.legend}> Listing Starts on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch10("listings.8.startDate")}
+            aria-label="Auction Start Date"
+          />
+
+          {/* Input field for auction end date */}
+          <legend className={styles.legend}> Listing Ends on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch10("listings.8.endDate")}
+            aria-label="Auction End Date"
+          />
+          <h4 className={styles.formSectionTitle}>Price </h4>
+
+          {/* Input field for buyout price */}
+          <legend className={styles.legend}> Price per token</legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={0.000001}
+            {...registerBatch10("listings.8.price")}
+          />
+
+<h5 className={styles.formSectionTitle}>listing 10</h5>
+          {/* Input field for token Id to sell */}
+          <legend className={styles.legend}> Token ID </legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={1.000000}
+            {...registerBatch10("listings.9.tokenId")}
+          />
+          <h4 className={styles.formSectionTitle}>When </h4>
+
+          {/* Input field for auction start date */}
+          <legend className={styles.legend}> Listing Starts on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch10("listings.9.startDate")}
+            aria-label="Auction Start Date"
+          />
+
+          {/* Input field for auction end date */}
+          <legend className={styles.legend}> Listing Ends on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerBatch10("listings.9.endDate")}
+            aria-label="Auction End Date"
+          />
+          <h4 className={styles.formSectionTitle}>Price </h4>
+
+          {/* Input field for buyout price */}
+          <legend className={styles.legend}> Price per token</legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={0.000001}
+            {...registerBatch10("listings.9.price")}
+          />
+
+          <Web3Button
+            contractAddress={POLY_MARKETPLACE_ADDRESS}
+            action={async () => {
+              await handleSubmitBatch10(handleSubmissionBatch10)();
+            }}
+            onError={(error) => {
+              toast(`Listed Failed! Reason: ${error.cause}`, {
+                icon: "❌",
+                style: toastStyle,
+                position: "bottom-center",
+              });
+            }}
+            onSuccess={(txResult) => {
+              toast("Listed Successfully!", {
+                icon: "🥳",
+                style: toastStyle,
+                position: "bottom-center",
+              });
+              router.push(
+                `/ethdrop/paperhands`
+              );
+            }}
+          >
+            list 10
           </Web3Button>
           </div>
         </div>

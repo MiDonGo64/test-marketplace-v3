@@ -1,7 +1,7 @@
 import { useContract, useNFTs } from "@thirdweb-dev/react";
 import React from "react";
 import Container from "../../components/Container/Container";
-import NFTGridETHDrop from "../../components/NFT/NFTGrid/NFTGridETHDrop";
+import NFTGrid from "../../components/NFT/NFTGrid/NFTGridETHDrop";
 import { ETHDrop } from "../../const/contractAddresses";
 import styles from "../../styles/Navbar.module.css"
 import Link from "next/link";
@@ -44,7 +44,7 @@ const EthDrop: NextPage = () => {
               Bags
             </Link> 
         <p className="mt-8">Right... Click.. Save.</p>
-        <NFTGridETHDrop
+        <NFTGrid
           data={data}
           isLoading={isLoading}
           emptyText={"Looks like there are no NFTs in this collection. Did you fat finger some code???"} />

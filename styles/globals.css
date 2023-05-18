@@ -14,11 +14,12 @@
   --black: #000000;
   --white: #ffffff;
 
-  background-image: url("../stuff/background.png");
+  background-image: url("../stuff/background2.png");
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
   height: 1080px; /* You must set a specified height */
-  background-position: center; /* Center the image */
-  background-repeat: repeat; /* Do not repeat the image */
-  background-size: cover; /* Resize the background image to cover the entire container */
   --pageText: #ffd839;
   --scope: #0066ff;
 }

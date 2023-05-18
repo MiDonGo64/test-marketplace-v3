@@ -6,7 +6,7 @@ import {
   } from "@thirdweb-dev/react";
   import { NFT } from "@thirdweb-dev/sdk";
   import {
-    ETHDrop, ETH_MARKETPLACE_ADDRESS
+    ETHDrop, POLY_MARKETPLACE_ADDRESS
   } from "../../../const/contractAddresses";
   import styles from "../../NFT/NFT.module.css";
   import Skeleton from "../../Skeleton/Skeleton";
@@ -17,7 +17,7 @@ import {
   
   export default function NFTComponent({ nft }: Props) {
     const { contract: marketplace, isLoading: loadingContract } = useContract(
-      ETH_MARKETPLACE_ADDRESS,
+      POLY_MARKETPLACE_ADDRESS,
       "marketplace-v3"
     );
   
@@ -62,12 +62,6 @@ import {
                 <p className={styles.nftPriceValue}>
                   {`${auctionListing[0]?.minimumBidCurrencyValue.displayValue}
             ${auctionListing[0]?.minimumBidCurrencyValue.symbol}`}
-                </p>
-              </div>
-              <div>
-                <p className={styles.nftPriceLabel}>Time Left</p>
-                <p className={styles.nftPriceValue}>
-                  {`${auctionListing[0]?.endTimeInSeconds}`}
                 </p>
               </div>
             </div>

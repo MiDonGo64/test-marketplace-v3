@@ -16,6 +16,7 @@
 
 .nftName {
   text-overflow: ellipsis;
+  word-wrap: break-word;
   white-space: nowrap;
   overflow: hidden;
   max-width: 100%;
@@ -77,6 +78,7 @@
 
 .nftPriceValue {
   text-overflow: ellipsis;
+  word-wrap: break-word;
   white-space: nowrap;
   overflow: hidden;
   max-width: 100%;

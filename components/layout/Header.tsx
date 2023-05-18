@@ -1,5 +1,8 @@
 import {
-  useAddress, useMetamask
+  useAddress,
+  useConnect, 
+  useDisconnect,
+  metamaskWallet
 } from "@thirdweb-dev/react";
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
@@ -23,10 +26,13 @@ function useIsScrollTop() {
   return isTop;
 }
 
+const metamask = metamaskWallet();
+
 const Header: React.FC = () => {
   const { menuOpen, setMenuOpen } = useUserContext();
   const isTop = useIsScrollTop();
-  const connectWithMetamask = useMetamask();
+  const connect = useConnect();
+  const disconnect = useDisconnect();
   const address = useAddress();
 
   const shortAddress =
@@ -61,7 +67,15 @@ const Header: React.FC = () => {
       
       {/* Wallet Connect Button */}
       <div className="wallet">
-        <button className="btn-wallet" onClick={() => connectWithMetamask()}>
+        <button className="btn-wallet" onClick={() => {
+        if (address) {
+        disconnect()
+        } else {
+          connect(
+            metamask,
+            { chainId: 80001 },
+          )}
+      }}>
           <div className="relative ">
           <img className="w-10 hover:brightness-200 hover:grayscale" src="/PCData.png" alt="Databanks"></img>
 

@@ -13,7 +13,8 @@ import toast, { Toaster } from "react-hot-toast";
 import profileStyles from "../../styles/Profile.module.css";
 import styles from "../../styles/Sale.module.css";
 import {
-  ETHDrop, ETH_MARKETPLACE_ADDRESS
+  ETHDrop,
+  POLY_MARKETPLACE_ADDRESS
 } from "../../const/contractAddresses";
 import toastStyle from "../../utils/toastConfig";
 
@@ -44,7 +45,7 @@ export default function SaleInfo({ nft }: Props) {
   const router = useRouter();
   // Connect to marketplace contract
   const { contract: marketplace } = useContract(
-    ETH_MARKETPLACE_ADDRESS,
+    POLY_MARKETPLACE_ADDRESS,
     "marketplace-v3"
   );
 
@@ -62,7 +63,7 @@ export default function SaleInfo({ nft }: Props) {
     useCreateDirectListing(marketplace);
 
   // Manage form submission state using tabs and conditional rendering
-  const [tab, setTab] = useState<"direct" | "auction">("direct");
+  const [tab, setTab] = useState<"direct" | "auction" | "Floor-crapper 420">("direct");
 
   // Manage form values using react-hook-form library: Auction form
   const { register: registerAuction, handleSubmit: handleSubmitAuction } =
@@ -84,14 +85,14 @@ export default function SaleInfo({ nft }: Props) {
     const hasApproval = await nftCollection?.call(
       "isApprovedForAll",
       [nft.owner,
-      ETH_MARKETPLACE_ADDRESS]
+      POLY_MARKETPLACE_ADDRESS]
     );
 
     // If it is, provide approval
     if (!hasApproval) {
       const txResult = await nftCollection?.call(
         "setApprovalForAll",
-       [ ETH_MARKETPLACE_ADDRESS,
+       [ POLY_MARKETPLACE_ADDRESS,
         true]
       );
 
@@ -168,6 +169,13 @@ export default function SaleInfo({ nft }: Props) {
           >
             Auction
           </h3>
+          <h3
+            className={`${profileStyles.tab} 
+        ${tab === "Floor-crapper 420" ? profileStyles.activeTab : ""}`}
+            onClick={() => setTab("Floor-crapper 420")}
+          >
+            Floor-crapper 420
+          </h3>
         </div>
 
         {/* Direct listing fields */}
@@ -210,7 +218,7 @@ export default function SaleInfo({ nft }: Props) {
           />
 
           <Web3Button
-            contractAddress={ETH_MARKETPLACE_ADDRESS}
+            contractAddress={POLY_MARKETPLACE_ADDRESS}
             action={async () => {
               await handleSubmitDirect(handleSubmissionDirect)();
             }}
@@ -288,7 +296,7 @@ export default function SaleInfo({ nft }: Props) {
           />
 
           <Web3Button
-            contractAddress={ETH_MARKETPLACE_ADDRESS}
+            contractAddress={POLY_MARKETPLACE_ADDRESS}
             action={async () => {
               return await handleSubmitAuction(handleSubmissionAuction)();
             }}
@@ -311,6 +319,72 @@ export default function SaleInfo({ nft }: Props) {
             }}
           >
             Create Auction Listing
+          </Web3Button>
+        </div>
+
+                {/* Batch direct listing fields */}
+                <div
+          className={`${
+            tab === "Floor-crapper 420"
+              ? styles.activeTabContent
+              : profileStyles.tabContent
+          }`}
+          style={{ flexDirection: "column" }}
+        >
+          <h4 className={styles.formSectionTitle}>When </h4>
+
+          {/* Input field for auction start date */}
+          <legend className={styles.legend}> Listing Starts on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerDirect("startDate")}
+            aria-label="Auction Start Date"
+          />
+
+          {/* Input field for auction end date */}
+          <legend className={styles.legend}> Listing Ends on </legend>
+          <input
+            className={styles.input}
+            type="datetime-local"
+            {...registerDirect("endDate")}
+            aria-label="Auction End Date"
+          />
+          <h4 className={styles.formSectionTitle}>Price </h4>
+
+          {/* Input field for buyout price */}
+          <legend className={styles.legend}> Price per token</legend>
+          <input
+            className={styles.input}
+            type="number"
+            step={0.000001}
+            {...registerDirect("price")}
+          />
+
+          <Web3Button
+            contractAddress={POLY_MARKETPLACE_ADDRESS}
+            action={async () => {
+              await handleSubmitDirect(handleSubmissionDirect)();
+            }}
+            onError={(error) => {
+              toast(`Listed Failed! Reason: ${error.cause}`, {
+                icon: "❌",
+                style: toastStyle,
+                position: "bottom-center",
+              });
+            }}
+            onSuccess={(txResult) => {
+              toast("Listed Successfully!", {
+                icon: "🥳",
+                style: toastStyle,
+                position: "bottom-center",
+              });
+              router.push(
+                `/ethdrop/`
+              );
+            }}
+          >
+            list 1
           </Web3Button>
         </div>
       </div>

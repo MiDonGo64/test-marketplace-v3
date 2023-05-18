@@ -8,8 +8,9 @@
     "pages/_document.tsx",
     "components/layout/Footer.tsx",
     "components/layout/Layout.tsx",
-    "components/layout/Header.tsx"
-  ],
+    "components/layout/Header.tsx",
+    "pages/ethereum/[listingid]"
+, "pages/ethdrop/[contractAddress]/ethdrop"  ],
   "exclude": ["node_modules"],
   "compilerOptions": {
     "target": "es2022",

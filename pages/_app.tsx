@@ -16,7 +16,7 @@ const App: FC<AppProps> = ({ Component, pageProps }) => {
   return (
     <>
       <ThirdwebProvider 
-        activeChain={Goerli}
+        activeChain={Mumbai}
         >
         <UserContextProvider>
           {/* Progress bar when navigating between pages */}
@@ -43,7 +43,7 @@ const App: FC<AppProps> = ({ Component, pageProps }) => {
               pauseOnHover
             />
             <ToastContainer />
-        </UserContextProvider>
+        </UserContextProvider> 
       </ThirdwebProvider>
     </>
   );

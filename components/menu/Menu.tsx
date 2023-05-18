@@ -42,22 +42,22 @@ export default function Menu() {
                 </Link>
               </li>
               <li>
-                <Link href="/ethave" className="menu-bar-link" onClick={menuToggle}>
-                    Ethereum Avenue
+                <Link href="/polyway" className="menu-bar-link" onClick={menuToggle}>
+                    Polygon Way
                 </Link>
               </li>
               <li>
-                <Link href="/ethavegrifters" className="menu-bar-link" onClick={menuToggle}>
-                    Eth Ave Grifters
+                <Link href="/polywaygrifters" className="menu-bar-link" onClick={menuToggle}>
+                    Polygon Way Grifters
                 </Link>
               </li>
               <li>
-                <Link href="/polygonbags" className="menu-bar-link" onClick={menuToggle}>
-                    Ethereum Bags
+                <Link href="/BigBag" className="menu-bar-link" onClick={menuToggle}>
+                    Polygon Bags
                 </Link>
               </li>
               <li>
-                <Link href="/ethavegrifters" className="menu-bar-link" onClick={menuToggle}>
+                <Link href="/griftbox3/listingbox" className="menu-bar-link" onClick={menuToggle}>
                     My Grift Box
                 </Link>
               </li>

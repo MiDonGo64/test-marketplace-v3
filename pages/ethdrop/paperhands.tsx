@@ -8,14 +8,14 @@ import Link from "next/link";
 import siteMetadata from '../../data/siteMetadata';
 import Container from "../../components/Container/Container";
 import NFTGrid from "components/NFT/NFTGrid/NFTGridETHDropPaperhands";
-import { ETH_MARKETPLACE_ADDRESS } from "../../const/contractAddresses";
+import { POLY_MARKETPLACE_ADDRESS } from "../../const/contractAddresses";
 import styles from "../../styles/Buy.module.css";
 import { ETHDrop } from "../../const/contractAddresses";
 
   
 const PaperHands: NextPage = () => {
     const { contract: marketplace } = useContract(
-        ETH_MARKETPLACE_ADDRESS,
+        POLY_MARKETPLACE_ADDRESS,
         "marketplace-v3"
       );
     
@@ -43,10 +43,10 @@ const PaperHands: NextPage = () => {
                 <Link href="/ethdrop/grifters" className={styles.link}>
                   ||
                 </Link>
-                <Link href="ethdrop/ethdrop" className={styles.link}>
+                <Link href="ethdrop" className={styles.link}>
                   Collection
                 </Link>
-                <Link href="ethdrop/ethdrop" className={styles.link}>
+                <Link href="ethdrop" className={styles.link}>
                   ||
                 </Link>
                 <Link href="/ethdrop/bags" className={styles.link}>

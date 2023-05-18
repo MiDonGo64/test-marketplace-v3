@@ -31,12 +31,6 @@ export default function NFTCard({
                   {nft.bid}
                 </p>
               </div>
-              <div>
-                <p className={styles.nftPriceLabel}>Time Left</p>
-                <p className={styles.nftPriceValue}>
-                  {nft.time}
-                </p>
-              </div>
             </div>
             )}
           </div>

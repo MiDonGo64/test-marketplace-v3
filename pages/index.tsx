@@ -50,11 +50,18 @@ const Home: NextPage = () => {
               <p>Eth Drop</p>
             </Link>
             <Link
-              href={`/eththree/eththree`}
+              href={`/testkong/testkong`}
               className={styles.nftContainer}
             >
               <img className="w-100 hover:brightness-200 hover:grayscale" src="/DrDoomFunny.png" alt="Super Donnie"></img>
-              <p>Eth Three</p>
+              <p>Test Kong</p>
+            </Link>
+            <Link
+              href={`/polydrop/polydrop`}
+              className={styles.nftContainer}
+            >
+              <img className="w-100 hover:brightness-200 hover:grayscale" src="/DrDoomFunny.png" alt="Super Donnie"></img>
+              <p>Poly Drop</p>
             </Link>
         </div>  
         </Container>

@@ -8,14 +8,14 @@ import Link from "next/link";
 import siteMetadata from '../../data/siteMetadata';
 import Container from "../../components/Container/Container";
 import NFTGrid from "../../components/NFT/NFTGrid/NFTGridETHDropGrifters";
-import { ETH_MARKETPLACE_ADDRESS } from "../../const/contractAddresses";
+import { POLY_MARKETPLACE_ADDRESS } from "../../const/contractAddresses";
 import styles from "../../styles/Buy.module.css";
 import { ETHDrop } from "../../const/contractAddresses";
 
   
 const Grifters: NextPage = () => {
     const { contract: marketplace } = useContract(
-        ETH_MARKETPLACE_ADDRESS,
+        POLY_MARKETPLACE_ADDRESS,
         "marketplace-v3"
       );
     

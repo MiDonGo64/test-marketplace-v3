@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Goerli } from "@thirdweb-dev/chains";
+import { Mumbai } from "@thirdweb-dev/chains";
 import {
     MediaRenderer,
     ThirdwebNftMedia,
@@ -18,7 +18,7 @@ import Container from "../../../components/Container/Container";
 import Skeleton from "../../../components/Skeleton/Skeleton";
 import {
     ETHDrop,
-    ETH_MARKETPLACE_ADDRESS
+    POLY_MARKETPLACE_ADDRESS
 } from "../../../const/contractAddresses";
 import randomColor from "../../../utils/randomColor";
 import toastStyle from "../../../utils/toastConfig";
@@ -37,7 +37,7 @@ export default function TokenPage({ nft, contractMetadata }: Props) {
 
   // Connect to marketplace smart contract
   const { contract: marketplace, isLoading: loadingContract } = useContract(
-    ETH_MARKETPLACE_ADDRESS,
+    POLY_MARKETPLACE_ADDRESS,
     "marketplace-v3"
   );
 
@@ -156,6 +156,17 @@ export default function TokenPage({ nft, contractMetadata }: Props) {
             </Link> 
         <div className={styles.container}>
           <div className={styles.metadataContainer}>
+          {directListing && directListing[0] ? (
+                        <>
+                          <p className={styles.collectionName}>Listing # {directListing[0].id}</p>
+                        </>
+                      ) : auctionListing && auctionListing[0] ? (
+                        <>
+                          <p className={styles.collectionName}>Auction # {auctionListing[0].id}</p>
+                        </>
+                      ) : (
+                        "Not for sale"
+                      )}
             <ThirdwebNftMedia
               metadata={nft.metadata}
               className={styles.image}
@@ -250,7 +261,7 @@ export default function TokenPage({ nft, contractMetadata }: Props) {
             ) : (
               <>
                 <Web3Button
-                  contractAddress={ETH_MARKETPLACE_ADDRESS}
+                  contractAddress={POLY_MARKETPLACE_ADDRESS}
                   action={async () => await buyListing()}
                   onSuccess={() => {
                     toast(`Purchase success!`, {
@@ -288,7 +299,7 @@ export default function TokenPage({ nft, contractMetadata }: Props) {
                 />
 
                 <Web3Button
-                  contractAddress={ETH_MARKETPLACE_ADDRESS}
+                  contractAddress={POLY_MARKETPLACE_ADDRESS}
                   action={async () => await createBidOrOffer()}
                   onSuccess={() => {
                     toast(`Bid success!`, {
@@ -333,6 +344,7 @@ export default function TokenPage({ nft, contractMetadata }: Props) {
 
             <h3 className={styles.descriptionTitle}>Offers:</h3>
 
+
             <div className={styles.traitsContainer}>
               {offers?.map((offer) => (
                 <div
@@ -364,6 +376,7 @@ export default function TokenPage({ nft, contractMetadata }: Props) {
                 </div>
               ))}
             </div>
+
 
             <h3 className={styles.descriptionTitle}>History:</h3>
 
@@ -404,7 +417,7 @@ export default function TokenPage({ nft, contractMetadata }: Props) {
                   <div className={styles.eventContainer}>
                     <Link
                       className={styles.txHashArrow}
-                      href={`https://goerli.etherscan.io/tx/${event.transaction.transactionHash}`}
+                      href={`https://mumbai.polygonscan.com/tx/${event.transaction.transactionHash}`}
                       target="_blank"
                     >
                       ↗
@@ -423,7 +436,7 @@ export default function TokenPage({ nft, contractMetadata }: Props) {
 export const getStaticProps: GetStaticProps = async (context) => {
   const tokenId = context.params?.tokenId as string;
 
-  const sdk = new ThirdwebSDK(Goerli);
+  const sdk = new ThirdwebSDK(Mumbai);
 
   const contract = await sdk.getContract(ETHDrop);
 
@@ -445,7 +458,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const sdk = new ThirdwebSDK(Goerli);
+  const sdk = new ThirdwebSDK(Mumbai);
 
   const contract = await sdk.getContract(ETHDrop);
 

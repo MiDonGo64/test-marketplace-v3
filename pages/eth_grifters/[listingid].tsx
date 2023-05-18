@@ -11,16 +11,19 @@ import toast, { Toaster } from "react-hot-toast";
 import Container from "../../components/Container/Container";
 import Skeleton from "../../components/Skeleton/Skeleton";
 import {
-  ETH_MARKETPLACE_ADDRESS
+  POLY_MARKETPLACE_ADDRESS
 } from "../../const/contractAddresses";
 import randomColor from "../../utils/randomColor";
 import toastStyle from "../../utils/toastConfig";
 import styles from "../../styles/Token.module.css";
+import type { NextPage } from 'next';
+import Head from 'next/head';
+import siteMetadata from '../../data/siteMetadata';
 
 
 const [randomColor1, randomColor2] = [randomColor(), randomColor()];
   
-export default async function TokenPage() {
+const TokenId: NextPage = () => {
   const [bidValue, setBidValue] = useState<string>();
   const [ listingIdFormatted, setListingIdFormatted ] = useState<BigNumber>();
   const router = useRouter();
@@ -28,7 +31,7 @@ export default async function TokenPage() {
 
   // Connect to marketplace smart contract
   const { contract: marketplace } = useContract(
-    ETH_MARKETPLACE_ADDRESS,
+    POLY_MARKETPLACE_ADDRESS,
     "marketplace-v3"
   );
 
@@ -94,6 +97,10 @@ export default async function TokenPage() {
 
     return (
         <>
+          <Head>
+            <title>{siteMetadata.siteName} | Sell</title>
+          </Head>
+          <div className="">
           <Toaster position="bottom-center" reverseOrder={false} />
           <Container maxWidth="lg">
             <div className={styles.container}>
@@ -184,7 +191,7 @@ export default async function TokenPage() {
             ) : (
               <>
                 <Web3Button
-                  contractAddress={ETH_MARKETPLACE_ADDRESS}
+                  contractAddress={POLY_MARKETPLACE_ADDRESS}
                   action={async () => await buyListing()}
                   onSuccess={() => {
                     toast(`Purchase success!`, {
@@ -222,7 +229,7 @@ export default async function TokenPage() {
                 />
 
                 <Web3Button
-                  contractAddress={ETH_MARKETPLACE_ADDRESS}
+                  contractAddress={POLY_MARKETPLACE_ADDRESS}
                   action={async () => await createBidOrOffer()}
                   onSuccess={() => {
                     toast(`Bid success!`, {
@@ -304,7 +311,7 @@ export default async function TokenPage() {
                       <div className={styles.eventContainer}>
                         <Link
                           className={styles.txHashArrow}
-                          href={`https://goerli.etherscan.io/tx/${event.transaction.transactionHash}`}
+                          href={`https://mumbai.polygonscan.com/tx/${event.transaction.transactionHash}`}
                           target="_blank"
                         >
                           ↗
@@ -316,7 +323,9 @@ export default async function TokenPage() {
               </div>
             </div>
           </Container>
+          </div>
         </>
       );
     }
 
+    export default TokenId;
