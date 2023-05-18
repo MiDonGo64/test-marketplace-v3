@@ -1,30 +1,32 @@
 import {
-    MediaRenderer, useContract,
-    useContractEvents,
-    useDirectListing, Web3Button
-  } from "@thirdweb-dev/react";
-  import { OfferV3 } from "@thirdweb-dev/sdk";
-  import { BigNumber } from "ethers";
-  import Link from "next/link";
-  import { useRouter } from "next/router";
-  import { useEffect, useState } from "react";
-  import toast, { Toaster } from "react-hot-toast";
-  import Container from "../../components/Container/Container";
-  import Skeleton from "../../components/Skeleton/Skeleton";
-  import {
-    POLY_MARKETPLACE_ADDRESS
-  } from "../../const/contractAddresses";
-  import randomColor from "../../utils/randomColor";
-  import toastStyle from "../../utils/toastConfig";
-  import styles from "../../styles/Token.module.css";
-  import type { NextPage } from 'next';
-  import Head from 'next/head';
-  import siteMetadata from '../../data/siteMetadata';
-  
-  const [randomColor1, randomColor2] = [randomColor(), randomColor()];
-  
+  MediaRenderer, useContract,
+  useContractEvents,
+  Web3Button
+} from "@thirdweb-dev/react";
+import { DirectListingV3, OfferV3 } from "@thirdweb-dev/sdk";
+import { BigNumber, BigNumberish } from "ethers";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+import toast, { Toaster } from "react-hot-toast";
+import Container from "../../components/Container/Container";
+import Skeleton from "../../components/Skeleton/Skeleton";
+import {
+  POLY_MARKETPLACE_ADDRESS,
+  TUSDC_FOR_MUMBAI
+} from "../../const/contractAddresses";
+import randomColor from "../../utils/randomColor";
+import toastStyle from "../../utils/toastConfig";
+import styles from "../../styles/Token.module.css";
+import type { NextPage } from 'next';
+import Head from 'next/head';
+import siteMetadata from '../../data/siteMetadata';
+
+const [randomColor1, randomColor2] = [randomColor(), randomColor()];
+
 const TokenId: NextPage = () => {
-  const [bidValue, setBidValue] = useState<string>();
+  const [nft, setNft] = useState<DirectListingV3>();
+  const [offerID, setOfferID] = useState<BigNumber>();
   const [listingIdFormatted, setListingIdFormatted] = useState<BigNumber>();
   const [offers, setOffers] = useState<OfferV3[]>()
   const router = useRouter();
@@ -35,8 +37,6 @@ const TokenId: NextPage = () => {
     POLY_MARKETPLACE_ADDRESS,
     "marketplace-v3"
   );
-
-  const { data: nft, isLoading } = useDirectListing(marketplace, listingIdFormatted);
 
   const collectionAddress = nft?.assetContractAddress;
 
@@ -54,8 +54,8 @@ const TokenId: NextPage = () => {
       },
     });
 
-  async function createBidOrOffer() {
-    if (!bidValue) {
+  async function acceptOffer() {
+    if (!offerID) {
       toast(`Please enter a bid value`, {
         icon: "❌",
         style: toastStyle,
@@ -65,17 +65,11 @@ const TokenId: NextPage = () => {
     }
 
     try {
-      const txResult = await marketplace?.offers.makeOffer({
-        quantity: 1,
-        currencyContractAddress: "0x72F60F2F9695C5911bA57ee43339AD82ce8ABB6A",
-        tokenId: nft?.tokenId as string,
-        totalPrice: bidValue,
-        assetContractAddress: nft?.assetContractAddress as string,
-      });
+      const txResult = await marketplace?.offers.acceptOffer(offerID);
 
       return txResult;
     } catch {
-      throw new Error("No valid listing found for this NFT");
+      throw new Error("offer was not valid, try another.");
     }
   }
 
@@ -96,11 +90,22 @@ const TokenId: NextPage = () => {
   }
 
   useEffect(() => {
-    if (router.isReady && listingId.listingid) {
+    if (router.isReady) {
       setListingIdFormatted(BigNumber.from(listingId.listingid));
       console.log(listingId.listingid);
     }
-  }, [router.isReady, listingId.listingid]);
+  }, [router.isReady]);
+
+  // load direct listing
+  useEffect(() => {
+      async function listingEvents() {
+        if (listingIdFormatted) { // Check if nft is defined
+          const nft = await marketplace?.directListings.getListing(listingIdFormatted);
+          setNft(nft);
+        }
+      }
+      listingEvents();
+    }, [listingIdFormatted]);
 
   // load list of valid offers made on token
   useEffect(() => {
@@ -161,7 +166,7 @@ const TokenId: NextPage = () => {
                 <div className={styles.pricingInfo}>
                   <p className={styles.label}>Buy Now</p>
                   <div className={styles.pricingValue}>
-                    {isLoading || !nft ? (
+                    {!nft ? (
                       <Skeleton width="120" height="24" />
                     ) : (
                       <>
@@ -179,7 +184,7 @@ const TokenId: NextPage = () => {
                 </div>
               </div>
 
-              {isLoading ? (
+              {!nft ? (
                 <Skeleton width="100%" height="164" />
               ) : (
                 <>
@@ -216,13 +221,13 @@ const TokenId: NextPage = () => {
                     type="number"
                     step={0.000001}
                     onChange={(e) => {
-                      setBidValue(e.target.value);
+                      setOfferID(e.target.value as unknown as BigNumber);
                     }}
                   />
 
                   <Web3Button
                     contractAddress={POLY_MARKETPLACE_ADDRESS}
-                    action={createBidOrOffer}
+                    action={acceptOffer}
                     onSuccess={() => {
                       toast(`Bid success!`, {
                         icon: "✅",
