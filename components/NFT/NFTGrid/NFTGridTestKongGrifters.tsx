@@ -37,13 +37,7 @@ import type {
                   className={styles.nftContainer}
                    >
                 <NFTCard
-                  nft={{
-                    tokenId: nft.asset.id as string,
-                    name: nft.asset.name as string,
-                    tokenUri: nft.asset.image as string,
-                    time: nft.endTimeInSeconds as number,
-                    bid: nft.minimumBidCurrencyValue?.displayValue + nft.minimumBidCurrencyValue?.symbol
-                   }}
+                  nft={nft}
                   />
               </Link>
             ) : (
@@ -53,13 +47,7 @@ import type {
                 onClick={() => overrideOnclickBehavior(nft as unknown as string)}
               >
                 <NFTCard
-                  nft={{
-                    tokenId: nft.asset.id as string,
-                    name: nft.asset.name as string,
-                    tokenUri: nft.asset.image as string,
-                    time: nft.endTimeInSeconds as number,
-                    bid: nft.minimumBidCurrencyValue?.displayValue + nft.minimumBidCurrencyValue?.symbol
-                   }}
+                  nft={nft}
                   />
               </div>
             )

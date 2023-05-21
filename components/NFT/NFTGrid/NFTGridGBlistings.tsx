@@ -3,7 +3,7 @@ import type {
     } from "@thirdweb-dev/sdk";
   import Link from "next/link";
   import styles from "../../../styles/Buy.module.css";
-  import NFTCard from "../NFTGBListingCard";
+  import NFTCard from "../NFTCard";
   
   type Props = {
    data: DirectListingV3[] | undefined;

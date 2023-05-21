@@ -22,7 +22,7 @@ export default function NFTGrid({
        data.map((nft) =>
          !overrideOnclickBehavior ? (
            <Link
-               href={`/griftbox/${nft.id}`}
+               href={`/griftbox4/${nft.id}`}
                key={nft.assetContractAddress + nft.id}
                className={styles.nftContainer}
                 >

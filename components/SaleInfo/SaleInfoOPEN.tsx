@@ -14,7 +14,8 @@ import {
   import profileStyles from "../../styles/Profile.module.css";
   import styles from "../../styles/Sale.module.css";
   import {
-    POLY_MARKETPLACE_ADDRESS
+    POLY_MARKETPLACE_ADDRESS,
+    TUSDC_FOR_MUMBAI
   } from "../../const/contractAddresses";
   import toastStyle from "../../utils/toastConfig";
   
@@ -75,7 +76,7 @@ import {
           tokenId: nft.tokenId,
           startDate: new Date(),
           endDate: new Date(),
-          currencyContractAddress: "0x72F60F2F9695C5911bA57ee43339AD82ce8ABB6A",
+          currencyContractAddress: TUSDC_FOR_MUMBAI,
           floorPrice: "0",
           buyoutPrice: "0",
         },
@@ -118,7 +119,7 @@ import {
           tokenId: nft.tokenId,
           startDate: new Date(),
           endDate: new Date(),
-          currencyContractAddress: "0x72F60F2F9695C5911bA57ee43339AD82ce8ABB6A",
+          currencyContractAddress: TUSDC_FOR_MUMBAI,
           price: "0",
         },
       });
@@ -231,7 +232,7 @@ import {
                   position: "bottom-center",
                 });
                 router.push(
-                  `/ethave`
+                  `/polyway`
                 );
               }}
             >

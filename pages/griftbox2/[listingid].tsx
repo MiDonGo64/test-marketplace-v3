@@ -1,7 +1,7 @@
 import {
     MediaRenderer, useContract,
     useContractEvents,
-    useDirectListing, Web3Button
+    useDirectListing, useEnglishAuction, Web3Button
   } from "@thirdweb-dev/react";
   import { OfferV3 } from "@thirdweb-dev/sdk";
   import { BigNumber } from "ethers";
@@ -36,7 +36,7 @@ import {
       "marketplace-v3"
     );
   
-    const { data: nft, isLoading } = useDirectListing(marketplace, listingIdFormatted);
+    const { data: nft, isLoading } = useEnglishAuction(marketplace, listingIdFormatted);
   
     const collectionAddress = nft?.assetContractAddress;
   
@@ -97,7 +97,7 @@ import {
   
     useEffect(() => {
       if (router.isReady) {
-        setListingIdFormatted(BigNumber.from(listingId.listingid));
+        setListingIdFormatted(listingId.listingid as unknown as BigNumber);
         console.log(listingId.listingid);
       }
     }, [router.isReady]);
@@ -167,8 +167,8 @@ import {
                         <>
                           {nft ? (
                             <>
-                              {nft?.currencyValuePerToken.displayValue}
-                              {" " + nft?.currencyValuePerToken.symbol}
+                              {nft?.id}
+                              {" " + nft?.id}
                             </>
                           ) : (
                             "Not for sale"

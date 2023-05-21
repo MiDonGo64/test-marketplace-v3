@@ -1,50 +1,37 @@
 import {
-    useContract,
-    useAddress,
-    OfferV3,
+  useContract,
+  useAddress,
+  useEnglishAuctions,
 } from "@thirdweb-dev/react";
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import siteMetadata from '../../data/siteMetadata';
 import Container from "../../components/Container/Container";
-import NFTGrid from "components/NFT/NFTGrid/NFTGridScratch";
+import NFTGrid from "components/NFT/NFTGrid/NFTGridGriftbox2";
 import { POLY_MARKETPLACE_ADDRESS } from "../../const/contractAddresses";
-import { useEffect, useState } from "react";
 import Link from "next/link";
 import styles from "../../styles/Navbar.module.css"
 
 
-  
+
 const PolyScratch: NextPage = () => {
-  const [offers, setOffers] = useState<OfferV3[]>()
   const address = useAddress();
     const { contract: marketplace } = useContract(
         POLY_MARKETPLACE_ADDRESS,
         "marketplace-v3"
       );
 
-      // load list of valid offers made on token
-  useEffect(() => {
-    async function listingEvents() {
-      if (address) { // Check if nft is defined
-        const offers = await marketplace?.offers.getAllValid({
-          offeror: address
-        });
-        setOffers(offers);
-      }
-    }
-    listingEvents();
-  }, [address]);
-    
-    return (
-      <>
-      <Head>
-          <title>{siteMetadata.siteName} | Grift Box</title>
-        </Head>
-        <div className="">  
-      <Container maxWidth="lg">
-          <h1 className="text-3xl font-bold">Scratch that!</h1>
-          <Link href="/griftbox1/griftbox" className={styles.link}>
+    const { data: nft, isLoading } = useEnglishAuctions(marketplace, {seller: address});
+  
+  return (
+    <>
+    <Head>
+        <title>{siteMetadata.siteName} | Grift Box</title>
+      </Head>
+      <div className="">  
+    <Container maxWidth="lg">
+        <h1 className="text-3xl font-bold">Watcha Selling...</h1>
+        <Link href="/griftbox1/griftbox" className={styles.link}>
             Auctions I Won
           </Link>
           <Link href="/griftbox1/griftbox" className={styles.link}>
@@ -65,14 +52,15 @@ const PolyScratch: NextPage = () => {
           <Link href="/griftbox4/scratch" className={styles.link}>
             Cancel Offers Made
           </Link> 
-          <p className="mt-8">Keep your money or just wait for the listing to end. This function isn't that useful but here for you if you want it.</p>
-          <NFTGrid
-            data={offers}
-            emptyText={"You've made no offers. None given, none to taketh away."} />
-        </Container>
-        </div>
-        </>
-    );
-  }
+        <p className="mt-8">Did you forget what you listed? Here they are. You can cancel a sell or just wait for the listing to end.</p>
+        <NFTGrid
+            data={nft}
+            isLoading={isLoading}
+            emptyText={"You've made no listings. None given, none to taketh away."} />
+      </Container>
+      </div>
+      </>
+  );
+}
 
 export default PolyScratch;

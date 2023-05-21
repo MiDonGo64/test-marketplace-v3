@@ -12,7 +12,8 @@ import toast, { Toaster } from "react-hot-toast";
 import Container from "../../components/Container/Container";
 import Skeleton from "../../components/Skeleton/Skeleton";
 import {
-  POLY_MARKETPLACE_ADDRESS
+  POLY_MARKETPLACE_ADDRESS,
+  TUSDC_FOR_MUMBAI
 } from "../../const/contractAddresses";
 import randomColor from "../../utils/randomColor";
 import toastStyle from "../../utils/toastConfig";
@@ -20,13 +21,14 @@ import styles from "../../styles/Token.module.css";
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import siteMetadata from '../../data/siteMetadata';
+import Countdown from 'react-countdown';
 
 const [randomColor1, randomColor2] = [randomColor(), randomColor()];
 
 const TokenId: NextPage = () => {
   const [bidValue, setBidValue] = useState<string>();
   const [listingIdFormatted, setListingIdFormatted] = useState<BigNumber>();
-  const [offers, setOffers] = useState<OfferV3[]>()
+  const [offers, setOffers] = useState<OfferV3[]>();
   const router = useRouter();
   const listingId = router.query;
 
@@ -42,6 +44,32 @@ const TokenId: NextPage = () => {
 
   // Connect to NFT Collection smart contract
   const { contract: nftCollection } = useContract(collectionAddress);
+
+  // FOMO Timer
+  const calculateTimeLeft = () => {
+    if (nft) {
+    const difference = +nft?.endTimeInSeconds - +nft?.startTimeInSeconds;
+    let timeLeft = {};
+
+    if (difference > 0) {
+      timeLeft = {
+        hours: Math.floor(difference / (1000 * 60 * 60)),
+        minutes: Math.floor((difference / 1000 / 60) % 60),
+        seconds: Math.floor((difference / 1000) % 60),
+      };
+    }
+
+    return timeLeft;
+  };
+  };
+
+  const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
+
+  useEffect(() => {
+    setTimeout(() => {
+      setTimeLeft(calculateTimeLeft());
+    }, 1000);
+  });
 
   // Load historical transfer events: TODO - more event types like sale
   const { data: transferEvents, isLoading: loadingTransferEvents } =
@@ -67,7 +95,7 @@ const TokenId: NextPage = () => {
     try {
       const txResult = await marketplace?.offers.makeOffer({
         quantity: 1,
-        currencyContractAddress: "0x72F60F2F9695C5911bA57ee43339AD82ce8ABB6A",
+        currencyContractAddress: TUSDC_FOR_MUMBAI,
         tokenId: nft?.tokenId as string,
         totalPrice: bidValue,
         assetContractAddress: nft?.assetContractAddress as string,
@@ -155,6 +183,12 @@ const TokenId: NextPage = () => {
                   </p>
                 </div>
               </div>
+              <p className={styles.collectionName}>Time left to dwell:</p>
+              {nft ? (
+                <Countdown className={styles.collectionName} date={(Date.now() + nft?.endTimeInSeconds) } />
+                ) : (
+                  "Not for sale"
+                )}
 
               <div className={styles.pricingContainer}>
                 {/* Pricing information */}

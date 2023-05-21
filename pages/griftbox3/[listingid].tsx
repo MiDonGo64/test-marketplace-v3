@@ -1,10 +1,10 @@
 import {
   MediaRenderer, useContract,
   useContractEvents,
-  Web3Button
+  useDirectListing, Web3Button
 } from "@thirdweb-dev/react";
-import { DirectListingV3, OfferV3 } from "@thirdweb-dev/sdk";
-import { BigNumber, BigNumberish } from "ethers";
+import { OfferV3 } from "@thirdweb-dev/sdk";
+import { BigNumber } from "ethers";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -21,14 +21,14 @@ import styles from "../../styles/Token.module.css";
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import siteMetadata from '../../data/siteMetadata';
+import Countdown from 'react-countdown';
 
 const [randomColor1, randomColor2] = [randomColor(), randomColor()];
 
 const TokenId: NextPage = () => {
-  const [nft, setNft] = useState<DirectListingV3>();
   const [offerID, setOfferID] = useState<BigNumber>();
   const [listingIdFormatted, setListingIdFormatted] = useState<BigNumber>();
-  const [offers, setOffers] = useState<OfferV3[]>()
+  const [offers, setOffers] = useState<OfferV3[]>();
   const router = useRouter();
   const listingId = router.query;
 
@@ -38,10 +38,38 @@ const TokenId: NextPage = () => {
     "marketplace-v3"
   );
 
+  const { data: nft, isLoading } = useDirectListing(marketplace, listingIdFormatted);
+
   const collectionAddress = nft?.assetContractAddress;
 
   // Connect to NFT Collection smart contract
   const { contract: nftCollection } = useContract(collectionAddress);
+
+  // FOMO Timer
+  const calculateTimeLeft = () => {
+    if (nft) {
+    const difference = +nft?.endTimeInSeconds - +nft?.startTimeInSeconds;
+    let timeLeft = {};
+
+    if (difference > 0) {
+      timeLeft = {
+        hours: Math.floor(difference / (1000 * 60 * 60)),
+        minutes: Math.floor((difference / 1000 / 60) % 60),
+        seconds: Math.floor((difference / 1000) % 60),
+      };
+    }
+
+    return timeLeft;
+  };
+  };
+
+  const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
+
+  useEffect(() => {
+    setTimeout(() => {
+      setTimeLeft(calculateTimeLeft());
+    }, 1000);
+  });
 
   // Load historical transfer events: TODO - more event types like sale
   const { data: transferEvents, isLoading: loadingTransferEvents } =
@@ -54,24 +82,24 @@ const TokenId: NextPage = () => {
       },
     });
 
-  async function acceptOffer() {
-    if (!offerID) {
-      toast(`Please enter a bid value`, {
-        icon: "❌",
-        style: toastStyle,
-        position: "bottom-center",
-      });
-      return;
+    async function acceptOffer() {
+      if (!offerID) {
+        toast(`Please enter a bid value`, {
+          icon: "❌",
+          style: toastStyle,
+          position: "bottom-center",
+        });
+        return;
+      }
+    
+      try {
+        const txResult = await marketplace?.offers.acceptOffer(offerID);
+    
+        return txResult;
+      } catch {
+        throw new Error("offer was not valid, try another.");
+      }
     }
-
-    try {
-      const txResult = await marketplace?.offers.acceptOffer(offerID);
-
-      return txResult;
-    } catch {
-      throw new Error("offer was not valid, try another.");
-    }
-  }
 
 
 
@@ -91,21 +119,10 @@ const TokenId: NextPage = () => {
 
   useEffect(() => {
     if (router.isReady) {
-      setListingIdFormatted(BigNumber.from(listingId.listingid));
+      setListingIdFormatted(listingId.listingid as unknown as BigNumber);
       console.log(listingId.listingid);
     }
   }, [router.isReady]);
-
-  // load direct listing
-  useEffect(() => {
-      async function listingEvents() {
-        if (listingIdFormatted) { // Check if nft is defined
-          const nft = await marketplace?.directListings.getListing(listingIdFormatted);
-          setNft(nft);
-        }
-      }
-      listingEvents();
-    }, [listingIdFormatted]);
 
   // load list of valid offers made on token
   useEffect(() => {
@@ -160,13 +177,19 @@ const TokenId: NextPage = () => {
                   </p>
                 </div>
               </div>
+              <p className={styles.collectionName}>Time left to dwell:</p>
+              {nft ? (
+                <Countdown className={styles.collectionName} date={(Date.now() + nft?.endTimeInSeconds) } />
+                ) : (
+                  "Not for sale"
+                )}
 
               <div className={styles.pricingContainer}>
                 {/* Pricing information */}
                 <div className={styles.pricingInfo}>
                   <p className={styles.label}>Buy Now</p>
                   <div className={styles.pricingValue}>
-                    {!nft ? (
+                    {isLoading || !nft ? (
                       <Skeleton width="120" height="24" />
                     ) : (
                       <>
@@ -184,7 +207,7 @@ const TokenId: NextPage = () => {
                 </div>
               </div>
 
-              {!nft ? (
+              {isLoading ? (
                 <Skeleton width="100%" height="164" />
               ) : (
                 <>
@@ -244,7 +267,7 @@ const TokenId: NextPage = () => {
                       });
                     }}
                   >
-                    place offer
+                    Accept Offer
                   </Web3Button>
 
 
@@ -363,3 +386,10 @@ const TokenId: NextPage = () => {
 }
 
 export default TokenId;
+
+
+
+
+
+
+

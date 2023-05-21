@@ -3,7 +3,8 @@ import {
   MediaRenderer, useContract,
   useContractEvents,
   useEnglishAuction, Web3Button,
-  CurrencyValue
+  CurrencyValue,
+  Bid
 } from "@thirdweb-dev/react";
 import { BigNumber } from "ethers";
 import Link from "next/link";
@@ -29,7 +30,7 @@ const [randomColor1, randomColor2] = [randomColor(), randomColor()];
 const TokenId: NextPage = () => {
   const [ bidValue, setBidValue ] = useState<string>();
   const [ listingIdFormatted, setListingIdFormatted ] = useState<BigNumber>();
-  const [ winner, setWinner ] = useState<CurrencyValue>();
+  const [ winner, setWinner ] = useState<Bid>();
   const router = useRouter();
   const listingId = router.query;
 
@@ -102,7 +103,7 @@ const TokenId: NextPage = () => {
         useEffect(() => {
           async function listingEvents() {
             if (listingIdFormatted) { // Check if nft is defined
-              const winner = await marketplace?.englishAuctions.getMinimumNextBid(listingIdFormatted);
+              const winner = await marketplace?.englishAuctions.getWinner(listingIdFormatted);
               setWinner(winner);
             }
           }
@@ -188,8 +189,8 @@ const TokenId: NextPage = () => {
                     <>
                       {winner ? (
                         <>
-                          {winner.displayValue}
-                          {" " + nft?.buyoutCurrencyValue.symbol}
+                          {winner?.bidAmountCurrencyValue.displayValue}
+                          {" " + winner?.bidAmountCurrencyValue.symbol}
                         </>
                       ) : (
                         "Not for sale"

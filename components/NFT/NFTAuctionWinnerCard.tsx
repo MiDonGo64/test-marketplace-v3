@@ -1,11 +1,11 @@
 import {
   MediaRenderer
 } from "@thirdweb-dev/react";
-import { DirectListingV3 } from "@thirdweb-dev/sdk";
+import { EnglishAuction } from "@thirdweb-dev/sdk";
 import styles from "../NFT/NFT.module.css";
 
 type Props = {
-  nft: DirectListingV3;
+  nft: EnglishAuction;
 };
 
 export default function NFTComponent({ nft }: Props) {
@@ -14,7 +14,7 @@ export default function NFTComponent({ nft }: Props) {
 
   return (
     <>
-      <MediaRenderer src={nft.asset.image} className={styles.nftImage} />
+      <MediaRenderer src={nft?.asset.image} className={styles.nftImage} />
 
       <p className={styles.nftTokenId}>Token ID #{nft.asset.id}</p>
       <p className={styles.nftName}>{nft.asset.name}</p>
@@ -22,10 +22,9 @@ export default function NFTComponent({ nft }: Props) {
       <div className={styles.priceContainer}>
               <div className={styles.nftBidContainer}>
               <div>
-                <p className={styles.nftPriceLabel}>List Price</p>
+                <p className={styles.nftPriceLabel}>Auction ID</p>
                 <p className={styles.nftPriceValue}>
-                {`${nft.currencyValuePerToken.displayValue}
-          ${nft.currencyValuePerToken.symbol}`}
+                {nft.id}
                 </p>
               </div>
             </div>

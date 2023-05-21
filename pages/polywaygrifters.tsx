@@ -21,11 +21,11 @@ import NFTGrid from "components/NFT/NFTGrid/NFTGridGrifters";
       return (
         <>
         <Head>
-          <title>{siteMetadata.siteName} | Ethereum Avenue</title>
+          <title>{siteMetadata.siteName} | Polygon Way</title>
         </Head>
         <div className="">  
           <Container maxWidth="lg">
-            <h1 className="text-3xl font-bold">Ethereum Avenue: Grifters</h1>
+            <h1 className="text-3xl font-bold">Polygon Way: Grifters</h1>
             <p className="mt-8"></p>
             <NFTGrid
               data={nfts}

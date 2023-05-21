@@ -25,7 +25,7 @@ import {
   
   const TokenId: NextPage = () => {
     const [offerIdFormatted, setOfferIdFormatted] = useState<BigNumber>();
-    const [nft, setNft] = useState<OfferV3>()
+    const [nft, setNft] = useState<OfferV3>();
     const router = useRouter();
     const offerId = router.query;
   

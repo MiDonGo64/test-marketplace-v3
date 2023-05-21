@@ -48,7 +48,7 @@ export default function Menu() {
               </li>
               <li>
                 <Link href="/polywaygrifters" className="menu-bar-link" onClick={menuToggle}>
-                    Polygon Way Grifters
+                    Grifters Alley
                 </Link>
               </li>
               <li>

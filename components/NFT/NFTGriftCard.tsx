@@ -1,39 +1,35 @@
-import { MediaRenderer } from "@thirdweb-dev/react";
-  import React from "react";
-  import styles from "./OPENNFT.module.css";
-  
+import {
+  MediaRenderer
+} from "@thirdweb-dev/react";
+import { EnglishAuction } from "@thirdweb-dev/sdk";
+import styles from "../NFT/NFT.module.css";
+
+type Props = {
+  nft: EnglishAuction;
+};
+
+export default function NFTComponent({ nft }: Props) {
   
 
-export default function NFTCard({
- nft,
-}: {
- nft: {
- tokenUri: string;
- name: string;
- tokenId: string,
- time: number,
- bid?: string;
- };
-}) {
-    return (
-        <>
-          <MediaRenderer src={nft.tokenUri} className={styles.nftImage} />
-    
-          <p className={styles.nftTokenId}>Token ID #{nft.tokenId}</p>
-          <p className={styles.nftName}>{nft.name}</p>
-    
-          <div className={styles.priceContainer}>
-            {nft.bid && (
+
+  return (
+    <>
+      <MediaRenderer src={nft?.asset.image} className={styles.nftImage} />
+
+      <p className={styles.nftTokenId}>Token ID #{nft.asset.id}</p>
+      <p className={styles.nftName}>{nft.asset.name}</p>
+
+      <div className={styles.priceContainer}>
               <div className={styles.nftBidContainer}>
               <div>
-                <p className={styles.nftPriceLabel}>Minimum Bid</p>
+                <p className={styles.nftPriceLabel}>Bids start at</p>
                 <p className={styles.nftPriceValue}>
-                  {nft.bid}
+                {`${nft.minimumBidCurrencyValue.displayValue}
+          ${nft.minimumBidCurrencyValue.symbol}`}
                 </p>
               </div>
             </div>
-            )}
           </div>
-        </>
-      );
-    }
+    </>
+  );
+}
